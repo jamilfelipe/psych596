@@ -34,9 +34,11 @@ Today's activity is based entirely on [Violet Brown's 2021 article, "An Introduc
     - `afex` you should already have installed  
 - setup your project folder (with data and r_docs folders within) and start a new project in this existing folder  
 - start a new R markdown for your code and notes and include the usual code in the setup chunk, but add `library(lme4)` to the setup chunk (and then run the chunk)   
-    - Older versions of R may give an error along the lines of `cholmod_factor_ldetA not provided by package Matrix` when you try to load the package.  If this happens, try running these two lines of code in your console (why? see [this discussion](https://stackoverflow.com/questions/77481539/error-in-initializeptr-function-cholmod-factor-ldeta-not-provided-by-pack))    
-        `tools::package_dependencies("Matrix", which = "LinkingTo", reverse = TRUE)[[1L]]`  
-        `install.packages("lme4", type = "source")`   
+    - Older versions of R may give an error along the lines of `cholmod_factor_ldetA not provided by package Matrix` when you try to load the package.  If this happens, trying installing the `Matrix` and `lme4` packages directly from CRAN by running these commands in the console (I recommend that you restart RStudio first - don't save the workspace - Thanks to Amanda Derrell for looking this up!):    
+        `oo <- options(repos = "https://cran.r-project.org/")` *changes the package repository setting and saves original setting in `oo`*  
+        `install.packages("Matrix")` *installs from CRAN*  
+        `install.packages("lme4")` *installs from CRAN*  
+        `options(oo)` *restores repository setting to what you had before*   
 
 - Download these files and place in the data folder within your project folder:  
     - [rt_dummy_data.csv](../data/rt_dummy_data.csv) for example 1  
@@ -321,3 +323,10 @@ Table from Speekenbrink (2023):
 [![r-formula-syntax](../images/r-formula-table.png)](https://mspeekenbrink.github.io/sdam-r-companion/linear-mixed-effects-models.html#formulating-and-estimating-linear-mixed-effects-models-with-lme4).  
 
 [Learn from others' mistakes](https://retractionwatch.com/2016/02/03/makeup-use-linked-to-testosterone-levels-not-so-fast-says-retraction/)  
+
+```{r}
+sjPlot::plot_model(rt_full_mod,type = "eff", terms = "modality") + 
+  coord_cartesian(ylim = c(500,1200)) + 
+  theme_classic()
+```
+
