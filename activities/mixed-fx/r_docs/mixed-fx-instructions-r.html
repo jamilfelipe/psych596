@@ -633,8 +633,10 @@ chunk (and then run the chunk)
 you try to load the package. If this happens, try running these two
 lines of code in your console (why? see <a href="https://stackoverflow.com/questions/77481539/error-in-initializeptr-function-cholmod-factor-ldeta-not-provided-by-pack">this
 discussion</a>)<br />
-<code>tools::package_dependencies(&quot;Matrix&quot;, which = &quot;LinkingTo&quot;, reverse = TRUE)[[1L]]</code><br />
-<code>install.packages(&quot;lme4&quot;, type = &quot;source&quot;)</code></li>
+<code>oo <- options(repos = "https://cran.r-project.org/")</code><br />
+<code>install.packages("Matrix")</code><br />
+<code>install.packages("lme4")</code><br />
+<code>options(oo)</code></li>
 </ul></li>
 <li>Download these files and place in the data folder within your
 project folder:
