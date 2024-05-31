@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>loglin-inclass2024-spss</title>
+
+
+<style type="text/css">
+body {
+  font-family: Helvetica, arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background-color: white;
+  padding: 30px; }
+
+body > *:first-child {
+  margin-top: 0 !important; }
+body > *:last-child {
+  margin-bottom: 0 !important; }
+
+a {
+  color: #4183C4; }
+a.absent {
+  color: #cc0000; }
+a.anchor {
+  display: block;
+  padding-left: 30px;
+  margin-left: -30px;
+  cursor: pointer;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0; }
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 20px 0 10px;
+  padding: 0;
+  font-weight: bold;
+  -webkit-font-smoothing: antialiased;
+  cursor: text;
+  position: relative; }
+
+h1:hover a.anchor, h2:hover a.anchor, h3:hover a.anchor, h4:hover a.anchor, h5:hover a.anchor, h6:hover a.anchor {
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA09pVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoMTMuMCAyMDEyMDMwNS5tLjQxNSAyMDEyLzAzLzA1OjIxOjAwOjAwKSAgKE1hY2ludG9zaCkiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6OUM2NjlDQjI4ODBGMTFFMTg1ODlEODNERDJBRjUwQTQiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6OUM2NjlDQjM4ODBGMTFFMTg1ODlEODNERDJBRjUwQTQiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo5QzY2OUNCMDg4MEYxMUUxODU4OUQ4M0REMkFGNTBBNCIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo5QzY2OUNCMTg4MEYxMUUxODU4OUQ4M0REMkFGNTBBNCIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PsQhXeAAAABfSURBVHjaYvz//z8DJYCRUgMYQAbAMBQIAvEqkBQWXI6sHqwHiwG70TTBxGaiWwjCTGgOUgJiF1J8wMRAIUA34B4Q76HUBelAfJYSA0CuMIEaRP8wGIkGMA54bgQIMACAmkXJi0hKJQAAAABJRU5ErkJggg==) no-repeat 10px center;
+  text-decoration: none; }
+
+h1 tt, h1 code {
+  font-size: inherit; }
+
+h2 tt, h2 code {
+  font-size: inherit; }
+
+h3 tt, h3 code {
+  font-size: inherit; }
+
+h4 tt, h4 code {
+  font-size: inherit; }
+
+h5 tt, h5 code {
+  font-size: inherit; }
+
+h6 tt, h6 code {
+  font-size: inherit; }
+
+h1 {
+  font-size: 28px;
+  color: black; }
+
+h2 {
+  font-size: 24px;
+  border-bottom: 1px solid #cccccc;
+  color: black; }
+
+h3 {
+  font-size: 18px; }
+
+h4 {
+  font-size: 16px; }
+
+h5 {
+  font-size: 14px; }
+
+h6 {
+  color: #777777;
+  font-size: 14px; }
+
+p, blockquote, ul, ol, dl, li, table, pre {
+  margin: 15px 0; }
+
+hr {
+  background: transparent url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAAECAYAAACtBE5DAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6OENDRjNBN0E2NTZBMTFFMEI3QjRBODM4NzJDMjlGNDgiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6OENDRjNBN0I2NTZBMTFFMEI3QjRBODM4NzJDMjlGNDgiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo4Q0NGM0E3ODY1NkExMUUwQjdCNEE4Mzg3MkMyOUY0OCIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo4Q0NGM0E3OTY1NkExMUUwQjdCNEE4Mzg3MkMyOUY0OCIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PqqezsUAAAAfSURBVHjaYmRABcYwBiM2QSA4y4hNEKYDQxAEAAIMAHNGAzhkPOlYAAAAAElFTkSuQmCC) repeat-x 0 0;
+  border: 0 none;
+  color: #cccccc;
+  height: 4px;
+  padding: 0;
+}
+
+body > h2:first-child {
+  margin-top: 0;
+  padding-top: 0; }
+body > h1:first-child {
+  margin-top: 0;
+  padding-top: 0; }
+  body > h1:first-child + h2 {
+    margin-top: 0;
+    padding-top: 0; }
+body > h3:first-child, body > h4:first-child, body > h5:first-child, body > h6:first-child {
+  margin-top: 0;
+  padding-top: 0; }
+
+a:first-child h1, a:first-child h2, a:first-child h3, a:first-child h4, a:first-child h5, a:first-child h6 {
+  margin-top: 0;
+  padding-top: 0; }
+
+h1 p, h2 p, h3 p, h4 p, h5 p, h6 p {
+  margin-top: 0; }
+
+li p.first {
+  display: inline-block; }
+li {
+  margin: 0; }
+ul, ol {
+  padding-left: 30px; }
+
+ul :first-child, ol :first-child {
+  margin-top: 0; }
+
+dl {
+  padding: 0; }
+  dl dt {
+    font-size: 14px;
+    font-weight: bold;
+    font-style: italic;
+    padding: 0;
+    margin: 15px 0 5px; }
+    dl dt:first-child {
+      padding: 0; }
+    dl dt > :first-child {
+      margin-top: 0; }
+    dl dt > :last-child {
+      margin-bottom: 0; }
+  dl dd {
+    margin: 0 0 15px;
+    padding: 0 15px; }
+    dl dd > :first-child {
+      margin-top: 0; }
+    dl dd > :last-child {
+      margin-bottom: 0; }
+
+blockquote {
+  border-left: 4px solid #dddddd;
+  padding: 0 15px;
+  color: #777777; }
+  blockquote > :first-child {
+    margin-top: 0; }
+  blockquote > :last-child {
+    margin-bottom: 0; }
+
+table {
+  padding: 0;border-collapse: collapse; }
+  table tr {
+    border-top: 1px solid #cccccc;
+    background-color: white;
+    margin: 0;
+    padding: 0; }
+    table tr:nth-child(2n) {
+      background-color: #f8f8f8; }
+    table tr th {
+      font-weight: bold;
+      border: 1px solid #cccccc;
+      margin: 0;
+      padding: 6px 13px; }
+    table tr td {
+      border: 1px solid #cccccc;
+      margin: 0;
+      padding: 6px 13px; }
+    table tr th :first-child, table tr td :first-child {
+      margin-top: 0; }
+    table tr th :last-child, table tr td :last-child {
+      margin-bottom: 0; }
+
+img {
+  max-width: 100%; }
+
+span.frame {
+  display: block;
+  overflow: hidden; }
+  span.frame > span {
+    border: 1px solid #dddddd;
+    display: block;
+    float: left;
+    overflow: hidden;
+    margin: 13px 0 0;
+    padding: 7px;
+    width: auto; }
+  span.frame span img {
+    display: block;
+    float: left; }
+  span.frame span span {
+    clear: both;
+    color: #333333;
+    display: block;
+    padding: 5px 0 0; }
+span.align-center {
+  display: block;
+  overflow: hidden;
+  clear: both; }
+  span.align-center > span {
+    display: block;
+    overflow: hidden;
+    margin: 13px auto 0;
+    text-align: center; }
+  span.align-center span img {
+    margin: 0 auto;
+    text-align: center; }
+span.align-right {
+  display: block;
+  overflow: hidden;
+  clear: both; }
+  span.align-right > span {
+    display: block;
+    overflow: hidden;
+    margin: 13px 0 0;
+    text-align: right; }
+  span.align-right span img {
+    margin: 0;
+    text-align: right; }
+span.float-left {
+  display: block;
+  margin-right: 13px;
+  overflow: hidden;
+  float: left; }
+  span.float-left span {
+    margin: 13px 0 0; }
+span.float-right {
+  display: block;
+  margin-left: 13px;
+  overflow: hidden;
+  float: right; }
+  span.float-right > span {
+    display: block;
+    overflow: hidden;
+    margin: 13px auto 0;
+    text-align: right; }
+
+code, tt {
+  margin: 0 2px;
+  padding: 0 5px;
+  white-space: nowrap;
+  border: 1px solid #eaeaea;
+  background-color: #f8f8f8;
+  border-radius: 3px; }
+
+pre code {
+  margin: 0;
+  padding: 0;
+  white-space: pre;
+  border: none;
+  background: transparent; }
+
+.highlight pre {
+  background-color: #f8f8f8;
+  border: 1px solid #cccccc;
+  font-size: 13px;
+  line-height: 19px;
+  overflow: auto;
+  padding: 6px 10px;
+  border-radius: 3px; }
+
+pre {
+  background-color: #f8f8f8;
+  border: 1px solid #cccccc;
+  font-size: 13px;
+  line-height: 19px;
+  overflow: auto;
+  padding: 6px 10px;
+  border-radius: 3px; }
+  pre code, pre tt {
+    background-color: transparent;
+    border: none; }
+
+sup {
+    font-size: 0.83em;
+    vertical-align: super;
+    line-height: 0;
+}
+
+kbd {
+  display: inline-block;
+  padding: 3px 5px;
+  font-size: 11px;
+  line-height: 10px;
+  color: #555;
+  vertical-align: middle;
+  background-color: #fcfcfc;
+  border: solid 1px #ccc;
+  border-bottom-color: #bbb;
+  border-radius: 3px;
+  box-shadow: inset 0 -1px 0 #bbb
+}
+
+* {
+	-webkit-print-color-adjust: exact;
+}
+@media screen and (min-width: 914px) {
+    body {
+        width: 854px;
+        margin:0 auto;
+    }
+}
+@media print {
+	table, pre {
+		page-break-inside: avoid;
+	}
+	pre {
+		word-wrap: break-word;
+	}
+  body {
+    padding: 2cm; 
+  }
+}
+</style>
+
+
+</head>
+
+<body>
+
+<h1 id="toc_0">Log linear modeling in SPSS</h1>
+
+<p><em>updated April 2024</em>  </p>
+
+<h2 id="toc_1">in-class activity using the collaborative dataset describing reporting in publications</h2>
+
+<p>We start with a data file <em><a href="../data/collab_data_2024_cleaned.csv">collab_data_2024_cleaned.csv</a></em> that was created from within the R markdown file <em><a href="../data/chisq-inclass2024.Rmd">chisq-inclass2024.Rmd</a></em>.  </p>
+
+<h3 id="toc_2">General process to analyze categorical outcomes with categorical predictors</h3>
+
+<p><img src="../images/categorical-process.png" alt="Categorical outcome decision process">&quot;</p>
+
+<h3 id="toc_3">Are reporting of race/ethn, income, and location related?</h3>
+
+<ul>
+<li><code>race_ethn_reported</code>, <code>income_or_ses_reported</code>, and <code>location_reported</code> are categorical/nominal variables, each with two levels (0=no,1=yes)
+
+<ul>
+<li>H<sub>0</sub>: the variables are independent<br></li>
+</ul></li>
+<li>with more than two categorical variables, we use a log linear analysis, here are the steps we will take:<br>
+
+<ol>
+<li>Use Crosstabs to generate contingency table.<br></li>
+<li>Test whether <code>race_ethn_reported</code>, <code>income_or_ses_reported</code>, and <code>location_reported</code> are related, using Analyze, Log Linear, Model Selection<br></li>
+<li>Backward elimination: Loglinear analysis is hierarchical: the initial model contains all main effects and interactions. 
+Starting with the highest-order interaction, terms are removed to see whether their removal significantly affects the fit of the model. If it does then this term is not removed and all lower-order effects are ignored.<br></li>
+<li>Look at the table labelled K-Way and Higher-Order Effects to see which effects have been retained in the final model.<br></li>
+<li>Then look at the table labelled Partial Associations to see the individual significance of the retained effects (look at the column labelled Sig. – values less than 0.05 indicate significance).<br></li>
+<li>Look at the Goodness-of-Fit Tests for the final model: if this model is a good fit of the data then this statistic should be <strong><em>non-significant</em></strong> (Sig. should be bigger than 0.05).<br></li>
+<li>Look at the contingency table to interpret any significant effects.<br>
+<em>these steps are quoted from the Field textbook, Chapter 19, section 19.12</em><br></li>
+</ol></li>
+</ul>
+
+<h3 id="toc_4">Step 1. Generate a frequency table using Crosstabs</h3>
+
+<ul>
+<li>Go to Analyze -&gt; Descriptives -&gt; Crosstabs<br></li>
+<li>Enter <code>race_ethn_reported</code> in rows<br></li>
+<li>Enter <code>income_or_ses_reported</code> in columns<br></li>
+<li>Enter <code>location_reported</code> in layers<br>
+You should get a frequency table like this:<br>
+<img src="../images/step1a.png" alt="Step 1a - freq table"><br></li>
+<li>All of the expected cell frequencies are at least 5, so we proceed<br></li>
+</ul>
+
+<h3 id="toc_5">Step 2. Analyze -&gt; Log Linear -&gt; Model Selection</h3>
+
+<p><img src="../images/step2a.png" alt="Step 2a - log linear menu">  </p>
+
+<p><strong>Enter the 3 variables into the &quot;Factors&quot; box</strong>, and use the &quot;Define Range&quot; button to define the range for each (minimum=0, maximum=1) </p>
+
+<p><img src="../images/step2b.png" alt="Step 2b - log linear model specification">  </p>
+
+<ul>
+<li>&quot;backward elimination&quot; is selected by default, and the Saturated (full model) model is specified by default<br></li>
+</ul>
+
+<h3 id="toc_6">Step 3. Backward Elimination</h3>
+
+<ul>
+<li><p>Look for the &quot;Backward Elimination Statistics&quot; table (screenshot below)<br>
+<img src="../images/step3a.png" alt="Backward elimination table">  </p></li>
+<li><p>Notice the following:  </p>
+
+<ol>
+<li>&quot;Step 0 - Generating Class&quot; this is the saturated model. 8 model terms and there are 8 cells so it fits the data perfectly<br></li>
+<li>&quot;Step 0 - Deleted Effect 1&quot; When the 3-way interaction is removed from the saturated model, the change statistic tells us if model fit was significantly reduced. It is not, χ2(1) = .986, p = .321, so we continue and start removing 2nd order terms (two-way interactions in Step 1)<br></li>
+<li>&quot;Step 1 - Generating Class&quot; this is the model without the 3-way interaction.<br></li>
+<li>&quot;Step 1 - Deleted Effect (1, 2, and 3) - each two-way interaction is deleted and compared to the Step 1 model (with all the 2-way interactions)<br></li>
+<li>There is no significant change when race*location is deleted, but there is significant change when other terms are deleted, so we remove race*location and keep the other terms in our &quot;Step 2&quot; model.<br></li>
+<li>The &quot;Step 2&quot; model is now our standard for comparison and the remaining two-way interactions are deleted in turn. We see a significant change when either is deleted, so we stop here. The &quot;step 2&quot; model (race + income + location + race*income + location*income + constant) is our final model.<br></li>
+</ol></li>
+</ul>
+
+<h3 id="toc_7">Steps 4 and 5. Look at K-way and Higher-order effects table and the Partial Associations table</h3>
+
+<p><img src="../images/step4a.png" alt="Step 4 - K-way table">  </p>
+
+<ul>
+<li>the &quot;K-way...&quot; table shows us that removing the 3 way interaction gives a nonsignificant change in fit (we could also see this in the backward elimination table)<br></li>
+<li>the Partial Associations table gives us significance tests for 1st and 2nd order terms in the model. as we saw in the backward elimination table, the race*location term is not significant<br></li>
+</ul>
+
+<h3 id="toc_8">Step 6. Look at Goodness of Fit for the final model</h3>
+
+<p><img src="../images/step6a.png" alt="Step 6 - goodness of fit">  </p>
+
+<ul>
+<li>Look at the Likelihood Ratio and Sig. value. The <strong><em>non-significant</em></strong> test indicates that the model is a good fit of the data- indicating essentially that the frequencies predicted by the final model do not significantly differ from the observed freqencies.<br></li>
+</ul>
+
+<h3 id="toc_9">Step 7. Look at 2-way contingency tables to interpret significant effects.</h3>
+
+<ul>
+<li><p>We generate 2-way contingency tables to understand the two-way associations. Expected freqencies in these tables are what we would expect under the null hypothesis (whereas expected freqencies in the loglinear analysis &quot;Cell counts and Residuals&quot; table - not included here - are expected frequencies predicted by the final model). Select the Chi-square and Risk Estimate options under &quot;Statistics&quot; to get the chi-square stat and odds ratios for these associations (included in the reporting section below)  </p></li>
+</ul>
+
+<ol>
+<li><p>Race reporting*Income reporting: we can see in the table that race is reported more than expected (under the null hypothesis) when income is reported (observed N=37, expected N = 21) and less when income is not reported (observed N=47, expected N = 63).<br>
+<img src="../images/step7a.png" alt="Step 7.1 - Race*Income">  </p></li>
+<li><p>Income reporting*Location reporting: we can see in the table that income/ses is reported more than expected (under the null hypothesis) when location is reported (observed N=47, expected N = 37) and less when income is not reported (observed N=101, expected N = 111).<br>
+<img src="../images/step7b.png" alt="Step 7.2 - Location*Income">  </p></li>
+</ol>
+
+<h3 id="toc_10">Reporting - how to report a finding like this:</h3>
+
+<ol>
+<li>report the likelihood ratio statistic for the final
+model. </li>
+<li>For any terms that are significant you should report the chi-square change. </li>
+<li>If you break down any higher-order interactions in subsequent analyses then report the relevant chi-square statistics (and odds ratios). </li>
+</ol>
+
+<p>For this example we could report:<br>
+The three-way loglinear analysis produced a final model that retained interactions of (a) race reporting by income/ses reporting and (b) location reporting by income/ses reporting. The likelihood ratio of this final model was χ2(2) = 3.222, p = .200, indicating the model did not significantly differ from the observed frequencies. The highest-order interaction (race reporting by income/ses reporting by location reporting) was not significant, (comparison of model without the three-way interaction to the full model: χ2(1) = 0.986, p = .320), and the race/ethnicity-reported by location-reported interaction was not significant (model without this term compared to model with all 2nd-order interactions: χ2(1) = 2.236, p = .135). To understand the two-ways associations, separate chi-square tests were performed to examine (a) race/ethnicity reporting by income/ses reporting (combining location reporting categories) and (b) location reporting by income/ses reporting (combining race/ethnicity reporting categories). There was a significant association between race/ethnicity-reported and whether location was reported, χ2(1) = 24.961, p &lt; .0001, odds ratio = 5.325. Furthermore, there was a significant association between income/ses-reported and whether location was reported, χ2(1) = 11.447, p = .001, odds ratio = 4.055. [plots/contingency tables can be used to characterize the two-way associations completely]    </p>
+
+<p>That&#39;s all for today!!!  </p>
+
+<h3 id="toc_11">References</h3>
+
+<ul>
+<li>Chapter 19 of Field textbook: Field, A.P. (2018). Discovering Statistics Using IBM SPSS Statistics. 5th Edition. London: Sage.<br></li>
+</ul>
+
+
+
+
+</body>
+
+</html>

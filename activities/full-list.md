@@ -144,7 +144,7 @@
 
 <!-- -->
 > ###### 	Log linear modeling activity notes in SPSS:
-> - [Notes on SPSS log linear analysis (from 2022)](chisq-loglin/spss/loglin-inclass2022-spss.html)   
+> - [Notes on SPSS log linear analysis](chisq-loglin/spss/loglin-inclass2024-spss.html)   
 
 
 

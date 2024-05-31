@@ -1,0 +1,341 @@
+---
+title: "Collaborative Data Activity - Categorical Outcomes"
+author: "J Bhanji"
+date: "2024-04-24"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
+library(tidyverse)
+```
+
+## General process to analyze categorical outcomes with categorical predictors  
+![Categorical outcome decision process](../images/categorical-process.png)
+
+
+## Step 0 - Install a package  
+- This activity makes use of two new packages: "janitor" (for data cleaning), and "vcd" (for odds ratio calculation)  
+
+## Step 1 - Import the data   
+- we make use of the "janitor" package in this doc  
+- allow "na", "n/a", etc. as missing values  
+- create unique id for reach row  
+- here's a [link to the tsv file](../data/Dataset-PublicationStatistics-2024.tsv) if you want to check it out on your own  
+```{r import}
+pub_tib <- readr::read_delim("data/Dataset-PublicationStatistics-2024.tsv",
+                             na=c("n/a","na","N/A","NA","Na","N/a",""),
+                             delim = "\t", show_col_types = FALSE) |>
+  janitor::clean_names() |>  #fixes the column names
+  select(-student_name,-citation,-doi) |>  #drop unused columns 
+  janitor::remove_empty(which = "rows") |>  # drop empty rows
+  mutate(id = row_number(), .before = 1) |>   #add a column with id for each row
+  mutate(across(where(is.character), str_trim)) |> #remove trailing/leading whitespace 
+  mutate(across(where(is.character), tolower)) #make all text columns lowercase 
+```
+
+## Step 2 - clean the data and set variable types
+Check values of our variables:  
+    1. binary variables (reported yes/no): store as factor and check levels  
+    2. numerical (e.g., participants): convert "no" to NA and store as numerical  
+    3. field: since one entry can belong to multiple fields, we create a series of dummy coded variables `soc`,`cog`,`dev`, etc where a row gets a value of 1 if the given field appears in the `field` column. there is some variance in how fields are entered ("social"/"soc", "cognitive"/"cog) so we'll just check for a key part of text for each.  
+    4. sample\_size\_justification: store as factor and check levels  
+    
+```{r clean-data}
+#fix typos where "no" was entered as "on"
+pub_tib <- pub_tib |> mutate(
+  income_or_ses_reported = str_replace(income_or_ses_reported, pattern = "on", replacement = "no")
+)
+
+#1. binary variables - using "factor" instead of "as_factor" because it will put
+#   the levels in alpha order - NA values are recoded as "no"
+pub_tib <- pub_tib |> mutate(
+  race_ethn_reported = factor(replace_na(race_ethn_reported,"no")),
+  income_or_ses_reported = factor(replace_na(income_or_ses_reported,"no")),
+  location_reported = factor(replace_na(location_reported,"no")),
+  general_sample = factor(replace_na(general_sample,"no")),
+  sample_size_justification = factor(sample_size_justification)
+)
+pub_tib |> select(race_ethn_reported:general_sample,sample_size_justification) |> purrr::map(levels)
+pub_tib |> count(race_ethn_reported)
+pub_tib |> count(income_or_ses_reported)
+pub_tib |> count(location_reported)
+pub_tib |> count(general_sample)
+pub_tib |> count(sample_size_justification)
+
+
+#2. Numerical variables: participants_male and participants_female are stored as chr
+#   use parse_number() and any non-numeric values will get NA 
+#   but there's an inconsistency in reporting NA/no versus 0 - we would need to 
+#   resolve the inconsistency to make use of that data
+pub_tib <- pub_tib |> mutate(
+  participants_n = parse_number(stringr::word(participants_n), na = "no"),
+  participants_male = parse_number(stringr::word(participants_male), na = "no"),
+  participants_female = parse_number(stringr::word(participants_female), na = "no"),
+  participants_nonbin = parse_number(stringr::word(participants_nonbin), na = "no")
+) 
+pub_tib |> select(participants_n:participants_nonbin) |> psych::describe()
+#3. check out "field"
+pub_tib |> janitor::tabyl(field) #or use count(field)  
+# now dummy code the "field" variable, allowing for multiple fields per entry
+pub_tib <- pub_tib |> 
+  mutate(
+    soc = if_else(str_detect(field,"soc"), 1, 0),
+    cog = if_else(str_detect(field,"cog"), 1, 0),
+    dev = if_else(str_detect(field,"dev"), 1, 0),
+    pers = if_else(str_detect(field,"pers"), 1, 0),
+    conbeh = if_else(str_detect(field,"con"), 1, 0),
+    neuro = if_else(str_detect(field,"neuro"), 1, 0),
+    quant = if_else(str_detect(field,"quant"), 1, 0),
+    other = if_else(str_detect(field,"other"), 1, 0),
+    #field_combo = ""
+  )
+# print counts of each field
+pub_tib |> select(soc:other) |> colSums(na.rm = TRUE)
+# # only 2 quant cases so drop that column
+# pub_tib <- pub_tib |> select(-quant)
+
+```
+## Step 3 - Chi-square test of independence and loglinear analysis  
+We can discuss what questions to ask with the data and we can explore as much as we have time for. But let's start with an example that makes use of a contingency table and the chi square test of independence:   
+
+#### Question 1 (chi square test): If a study uses a sample that is meant to represent the general population, is race/ethnicity more likely to be reported?    
+- we can test whether `general_sample` and `race_ethn_reported` are related  
+    - H<sub>0</sub>: `general_sample` and `race_ethn_reported` are independent
+    
+1. Generate contingency table    
+2. Examine observed frequencies compared to expected frequencies   
+3. Chi-squared test of independence  
+4. if expected frequency for a cell is 5 or less then use Fisher's exact test  
+
+```{r Q1, fig.show='hold', results='hold'}
+# 1. Contingency Table
+q1_xtab <- pub_tib |> 
+  with(gmodels::CrossTable(general_sample, race_ethn_reported, expected = TRUE,
+                       prop.chisq = TRUE)) #use fisher=TRUE if expected counts <5
+# 2. Cramers V (round to 3 decimals)
+cat("Cramer's V: ", round(DescTools::CramerV(q1_xtab$t),3), "\n")
+# 3. Extra: odds ratio
+q1_odds <- vcd::oddsratio(q1_xtab$t, log=FALSE)
+cat("odds ratio general_sample and race_ethn_reported")
+q1_odds  #interpretation: a general sample publication is YY as likely to report race/ethn compared to a non-general sample publication
+confint(q1_odds) #confidence interval
+```
+
+##### Understand the output  
+1. total observations - 306 means all cases were included  
+
+2. *N* is the observed joint frequency. For example, out of [how many?] samples that represent the general population, [how many?] of those papers reported race/ethnicity.  
+3. *Expected N* is the expected joint frequency.  
+4. *Chi-square contribution* measures the amount that a cell contributes to the overall chi-square statistic for the table (the sum of all contributions equals the overall chi-squared value below the table).   
+  
+##### Answer the following  
+1. Are any of the expected counts less than or equal to 5?  
+2. Are the observed deviations from expected frequencies likely under the null hypothesis? (χ<sup>2</sup>(1, N = 306) = -----, p<.0001).  
+3. Examine the observed and expected frequencies. What direction is the association between the categories?  
+4. What is the effect size? (Cramers V, odds ratio)  
+
+#### Using the last example as a template, let's ask whether research field and race/ethnicity reporting are related.  
+- each publication can only be classified as one field, so we will limit our cases to those that are classified as a single field  
+- after limiting cases, there are six categories of research field (and "other")    
+
+```{r Q1followup, fig.show='hold', results='hold'}
+# 0. filter cases to keep only single field pubs
+pub_tib <- pub_tib |> rowwise() |> 
+  mutate(
+    issinglefield = if_else(sum(c_across(soc:other))==1,1,0),
+  ) |> ungroup()
+pub_singlefield_tib <- pub_tib |> filter(issinglefield==1) |> 
+  mutate(
+    singlefield = case_when(
+      soc == 1 ~ "soc",
+      cog == 1 ~ "cog",
+      dev == 1 ~ "dev",
+      neuro == 1 ~ "neuro",
+      pers == 1 ~ "pers",
+      conbeh == 1 ~ "conbeh",
+      other == 1 ~ "other"
+    )
+  )
+pub_singlefield_tib |> count(singlefield)
+
+# 1. Contingency Table
+fieldxrace_xtab <- pub_singlefield_tib |> 
+  with(gmodels::CrossTable(singlefield, race_ethn_reported, expected = TRUE,
+                       prop.chisq = TRUE, simulate.p.value=TRUE)) #if expected counts <5
+# 2. Cramers V (round to 3 decimals)
+
+# 3. Interpretation
+```
+
+
+#### Question 2 (loglinear model): Are reporting of race/ethn, income, and location related?  
+- we can test whether `race_ethn_reported`, `income_or_ses_reported`, and `location_reported` are related
+    - H<sub>0</sub>: the variables are independent
+    
+1. Generate contingency table    
+2. Convert to dataframe of frequencies  
+3. Fit loglin model (using glm(family=poisson))  
+4. Compare observed to fitted (predicted) frequencies  
+5. Backward elimination (reduce the model)  
+    - hypothesis test for reduced model compared to previous model: significant (p<.05) chi-square test indicates that dropping the term in the reduced model significantly worsens the fit of the reduced model (meaning the term should be kept in the model)  
+    - hypothesis test for 
+6. Visualize  
+
+
+```{r Q2, fig.show='as.is', results='as.is'}
+cat("1. Contingency table (2x2x2)")
+q2_xtab <- pub_tib |> 
+  xtabs(formula = ~income_or_ses_reported + location_reported + race_ethn_reported)
+q2_xtab
+cat("Flatten table for display")
+ftable(q2_xtab, row.vars = c("race_ethn_reported","income_or_ses_reported"))
+cat("2. convert to dataframe of frequencies")
+q2_xtab.df <- as.data.frame(as.table(q2_xtab))
+cat("set reference level to no (-4 means leave out the 4th columnn for this computation)")
+q2_xtab.df[,-4] <- lapply(q2_xtab.df[,-4], relevel, ref = "no")
+cat("3. Fit a loglinear model, using glm(family=poisson), start with full model")
+q2_llmodfull <- glm(
+  Freq ~ income_or_ses_reported * location_reported * race_ethn_reported,
+  data = q2_xtab.df, family = poisson)
+summary(q2_llmodfull)
+cat("we can check the goodness of fit, but for the saturated model it is always 1\n")
+pchisq(deviance(q2_llmodfull), df = df.residual(q2_llmodfull), lower.tail = F)
+cat("1st step in backward elimination: drop the highest order term (3-way 
+interaction term) and compare to the previous step (full model).
+^2 is shorthand for all 2nd order interactions")
+q2_llmod2 <- glm(
+  Freq ~ (income_or_ses_reported + location_reported + race_ethn_reported)^2,
+  data = q2_xtab.df, family = poisson)
+summary(q2_llmod2)
+cat("goodness of fit test - nonsignificant value indicates that the model-predicted
+   frequencies do not significantly differ from the observed frequencies\n")
+pchisq(deviance(q2_llmod2), df = df.residual(q2_llmod2), lower.tail = F)
+cat("compare reduced model to full model\n")
+anova(q2_llmod2,q2_llmodfull)
+cat("take the chisq stat and lookup the p value for the model comparison
+  the nonsignificant value indicates that dropping the 3-way interaction does not
+  significantly affect model fit\n")
+pchisq(anova(q2_llmod2,q2_llmodfull)$Deviance[2], df = 1, lower.tail = F) 
+cat("next step in backward elimination: drop another term- let's drop race:income
+   then compare to the model from the previous step\n")
+q2_llmod3 <- glm(
+  Freq ~ income_or_ses_reported + location_reported + race_ethn_reported + 
+    income_or_ses_reported:location_reported + location_reported:race_ethn_reported,
+  data = q2_xtab.df, family = poisson)
+summary(q2_llmod3)
+cat("compare to higher order model (p-value is printed from pchisq function)\n")
+pchisq(anova(q2_llmod3,q2_llmod2)$Deviance[2], df = 1, lower.tail = F)
+cat("# there's a sig difference when we dropped race:income, so we keep it in the 
+  final model, and continue dropping each interaction term one by one and comparing
+  to the model with all 2-way interaction terms (q2_model2) - we drop location:race next\n") 
+q2_llmod4 <- glm(
+  Freq ~ income_or_ses_reported + location_reported + race_ethn_reported + 
+    income_or_ses_reported:location_reported + race_ethn_reported:income_or_ses_reported,
+  data = q2_xtab.df, family = poisson)
+summary(q2_llmod4)
+cat("compare to higher order model (p-value is printed from pchisq function)\n")
+pchisq(anova(q2_llmod4,q2_llmod2)$Deviance[2], df = 1, lower.tail = F)
+cat("# no significant difference when we dropped location:race, so we leave it out of the 
+  final model, and continue dropping each interaction term one by one and comparing
+  to the model with all 2-way interaction terms (q2_model2) - we drop income:location
+  next (it's the last two-way interaction to check\n") 
+q2_llmod5 <- glm(
+  Freq ~ income_or_ses_reported + location_reported + race_ethn_reported + 
+    location_reported:race_ethn_reported + race_ethn_reported:income_or_ses_reported,
+  data = q2_xtab.df, family = poisson)
+summary(q2_llmod5)
+cat("compare this to higher order model (p-value is printed from pchisq function)\n")
+pchisq(anova(q2_llmod5,q2_llmod2)$Deviance[2], df = 1, lower.tail = F)
+
+cat("we see that dropping the income:location term has a significant effect, so we keep it in and our final model is q2_llmod4, which included the single terms + location:race + location:income but dropped location:race\n")
+cat("goodness of fit test - nonsignificant value indicates that the model-predicted
+   frequencies do not significantly differ from the observed frequencies\n")
+cat("chi square stat for the final model:")
+deviance(q2_llmod4)
+cat("p value for the final model:")
+pchisq(deviance(q2_llmod4), df = df.residual(q2_llmod4), lower.tail = F)
+cat("4. Now look at the fitted values compared to the observed values for this final model (q2_llmod4). We need to combine the original data with the fitted values to do so. We can see that there is a fairly close fit between fitted and observed\n")
+cbind(q2_llmod4$data, fitted(q2_llmod4)) |> 
+  kableExtra::kbl(caption = "final model fitted and observed Freq values") |> kableExtra::kable_classic(lightable_options = "hover")
+cat("exponentiate coefficients to get odds (compared to reference value of no)\n")
+exp(coef(q2_llmod4))
+cat("5. Now we can Visualize the frequencies\n")
+q2_propxtab <- prop.table(q2_xtab,1)
+q2_propxtab.df <- as.data.frame(q2_propxtab)
+q2_propxtab.df |> ggplot(aes(x=race_ethn_reported, 
+                              y=Freq, fill=income_or_ses_reported)) +
+  geom_col(position = "dodge") + 
+  facet_wrap(~location_reported, labeller = "label_both")
+cat("5.1 let's also break that up into the two 2-way interactions, first let's do income:location - we see that location reporting is increased among publications that report income/ses\n")
+q2_incXloc_tab <- pub_tib |> 
+  xtabs(formula = ~income_or_ses_reported + location_reported)
+q2_propincXloc_df <- as.data.frame(prop.table(q2_incXloc_tab,1))
+q2_propincXloc_df |> 
+  ggplot(aes(x=income_or_ses_reported, y=Freq, fill=location_reported)) +
+  geom_col(position = "dodge") 
+cat("5.2 Now let's do race:income - we see that publications that did not report race also tended to not report income\n")
+q2_propraceXinc_tab <- pub_tib |> 
+  xtabs(formula = ~race_ethn_reported + income_or_ses_reported)
+q2_propraceXinc_df <- as.data.frame(prop.table(q2_propraceXinc_tab,1))
+q2_propraceXinc_df |> 
+  ggplot(aes(x=race_ethn_reported, y=Freq, fill=income_or_ses_reported)) +
+  geom_col(position = "dodge") 
+
+cat("6. follow up with 2x2 chi-square tests of (a) race:income and (b) location:income, using the chi square test of independence and odds ratio calculation like we did in the first example:\n")
+raceXinc_xtab <- pub_tib |> 
+  with(gmodels::CrossTable(race_ethn_reported, income_or_ses_reported, expected = TRUE,
+                       prop.chisq = TRUE)) #use fisher=TRUE if expected counts <5
+cat("odds ratio and conf interval:\n")
+vcd::oddsratio(raceXinc_xtab$t, log=FALSE)
+confint(vcd::oddsratio(raceXinc_xtab$t, log=FALSE)) #confidence interval
+cat("interpretation: a publication that reports race is 5.32 times more likely to report income, compared to a publication that does not report race\n")
+locXinc_xtab <- pub_tib |> 
+  with(gmodels::CrossTable(location_reported, income_or_ses_reported, expected = TRUE,
+                       prop.chisq = TRUE)) #use fisher=TRUE if expected counts <5
+cat("odds ratio and conf interval:")
+vcd::oddsratio(locXinc_xtab$t, log=FALSE)
+confint(vcd::oddsratio(locXinc_xtab$t, log=FALSE)) #confidence interval
+cat("interpretation: a publication that reports location is 2.6 times more likely to report income, compared to a publication that does not report location")
+
+
+```
+
+##### Based on our log lin modeling, let's answer the following  
+1. What is the simplest model that does not differ significantly from the full model?  
+    - Freq ~ income_or_ses_reported + location_reported + race_ethn_reported + 
+     + income_or_ses_reported:location_reported + race_ethn_reported:income_or_ses_reported  
+    - this is the model that includes all two-way interactions except race:location  
+2. How can we interpret this result?    
+    - we interpret the highest order terms in the model and see that:  
+        1. location reporting is increased among publications that report income/ses  
+        2. publications that report race also tended to report income   
+
+#### Reporting  
+
+- report the likelihood ratio statistic for the final
+model. 
+- For any terms that are significant you should report the chi-square change. 
+- If you break down any higher-order interactions in subsequent analyses then you need to report the relevant chi-square statistics (and odds ratios). 
+
+For this example we could report:  
+The three-way loglinear analysis produced a final model that retained interactions of (a) race reporting by income/ses reporting and (b) location reporting by income/ses reporting. The likelihood ratio of this final model was χ2(2) = 3.222, p = .200, indicating the model did not significantly differ from the observed frequencies. The highest-order interaction (race reporting by income/ses reporting by location reporting) was not significant, (comparison of model without the three-way interaction to the full model: χ2(1) = 0.986, p = .320), and the race/ethnicity-reported by location-reported interaction was not significant (model without this term compared to model with all 2nd-order interactions: χ2(1) = 2.236, p = .135. To break down the associations, separate chi-square tests were performed to examine (a) race/ethnicity reporting by income/ses reporting (combining location reporting categories) and (b) location reporting by income/ses reporting (combining race/ethnicity reporting categories). There was a significant association between race/ethnicity-reported and whether location was reported, χ2(1) = 24.961, p < .0001, odds ratio = 5.325. Furthermore, there was a significant association between income/ses-reported and whether location was reported, χ2(1) = 11.447, p = .001, odds ratio = 4.055. [plots/contingency tables can be used to characterize the two-way associations completely]    
+
+## Finishing up- export the cleaned data files and re-run analyses in SPSS  
+    - see [notes on the SPSS analysis](../spss/loglin-inclass2022-spss.html) linked on Canvas, it may be helpful to match up the output from SPSS to our output from the same analysis in R above     
+```{r data-export}
+pub_tib |> 
+  mutate(
+    race_ethn_reported = as.numeric(race_ethn_reported)-1, #factor levels are 1=no, 2=yes
+    income_or_ses_reported = as.numeric(income_or_ses_reported)-1, #so we subtract 1
+    location_reported = as.numeric(location_reported)-1    #to end up with 0, 1 values
+  ) |> 
+  readr::write_csv("data/collab_data_cleaned.csv")
+```
+
+
+#### References  
+- Chapter 19 of Field textbook: Field, A.P. (2018). Discovering Statistics Using IBM SPSS Statistics. 5th Edition. London: Sage.   
+ 
+
