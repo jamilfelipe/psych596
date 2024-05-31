@@ -89,12 +89,9 @@
 ### Activity #9 - Data Day 1  
 
 > ###### Files edited in class  
-> ###### SPSS files:  
-> - [SPSS Syntax (with notes)](data-day/spss/2022/DataDay1-syntax.sps)  -- [SPSS Output](data-day/spss/2022/DataDay1-output.spv)  
+> - [Notes on Atiyah's ANOVA in SPSS](data-day/spss/2024/dataday1-notes-spss.html)  
 
-<!-- -->
-> ###### R files:  
-> - [knitr html file](data-day/r_docs/2022-data-day1-analyses.html) -- [R markdown doc](data-day/r_docs/2022-data-day1-analyses.Rmd)
+
 
 ----------------------------------------------------------------
 
@@ -136,18 +133,18 @@
 ### Activity #13 - Data Day 2  
 
 > ###### Files edited in class:
-> - [knitr html file](data-day/r_docs/data-day2-class-activity.html) -- [R markdown doc](data-day/r_docs/data-day2-class-activity.Rmd)
+> - [Nick's mixed effects analysis in R - knitr html file](data-day/r_docs/2024-data-day-2.html) -- [R markdown doc](data-day/r_docs/2024-data-day-2.Rmd)
 
 ----------------------------------------------------------------
 
 ### Activity #14 - Categorical outcomes - chi squared and loglinear analysis  
 
 > ###### 	Chi-square and log linear modeling activity notes in RStudio:
-> - [knitr html file](chisq-loglin/r_docs/chisq-inclass2022.html) -- [(R markdown doc)](chisq-loglin/r_docs/chisq-inclass2022.Rmd) 
+> - [Analysis of publication statistics - knitr html file](chisq-loglin/r_docs/chisq-inclass2024.html) -- [(R markdown doc)](chisq-loglin/r_docs/chisq-inclass2024.Rmd) 
 
 <!-- -->
 > ###### 	Log linear modeling activity notes in SPSS:
-> - [Notes on SPSS log linear analysis](chisq-loglin/spss/loglin-inclass2022-spss.html)   
+> - [Notes on SPSS log linear analysis (from 2022)](chisq-loglin/spss/loglin-inclass2022-spss.html)   
 
 
 
