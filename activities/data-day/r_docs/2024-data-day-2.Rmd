@@ -1,0 +1,132 @@
+---
+title: "SmokingNA-ABMQ"
+output: html_document
+date: '2024-01-29'
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
+```
+
+
+
+### Nick's data - Positive autobiographical memories in cigarette smokers. 
+- cigarette smokers recalled positive memories in an interview format, for each memory they rated:
+    - how long ago the event occurred (ordinal, higher values are more recent memories)  
+    - if the memory involved cigarette smoking  
+    - how frequently they think about the memory  
+    - how (negative-positive) they feel while recalling the memory  
+    - how vivid the memory is  
+
+```{r read-data}
+library("tidyverse")
+library("lme4")
+mem_init_tib <- read_csv("data/mem_initial_ratings.csv") |> mutate(id = as.character(id))
+```
+
+## Hypothesis: In cigarette smokers, the vividness of a memory is related to (a) how old it is, (b) if it involves smoking, and (c) if it is frequently recalled. 
+
+#### First let's look at the vividness ratings (the DV)  
+```{r quick-look-vivid}
+quants <- quantile(mem_init_tib$mem_vividness, c(.25,.5,.75), na.rm = TRUE)
+vividness_mean <- mean(mem_init_tib$mem_vividness, na.rm = TRUE)
+p1 <- mem_init_tib %>% drop_na(mem_vividness) %>%
+  ggplot( aes(x=mem_vividness)) + geom_histogram(binwidth=1) + 
+    geom_vline(xintercept = quants, colour="red", linetype = "dashed") +
+    geom_vline(xintercept = vividness_mean, colour="black") +
+    theme_classic() + labs (title = "Mem vividness distribution- all individuals")
+p2 <- mem_init_tib %>% drop_na(mem_vividness) %>%
+    ggplot( aes(sample=mem_vividness)) + geom_qq() + geom_qq_line() + theme_classic() +
+      labs (title = "Mem vividness Q-Q- all individuals")
+p1; p2
+```
+#### Now the time variable (how old is the memory?)  
+```{r quick-look-time}
+quants <- quantile(mem_init_tib$mem_time, c(.25,.5,.75), na.rm = TRUE)
+time_mean <- mean(mem_init_tib$mem_time, na.rm = TRUE)
+p1 <- mem_init_tib %>% drop_na(mem_time) %>%
+  ggplot( aes(x=mem_time)) + geom_histogram(binwidth=1) + 
+    geom_vline(xintercept = quants, colour="red", linetype = "dashed") +
+    geom_vline(xintercept = time_mean, colour="black") +
+    theme_classic() + labs (title = "Mem time distribution- all individuals")
+p2 <- mem_init_tib %>% drop_na(mem_time) %>%
+    ggplot( aes(sample=mem_time)) + geom_qq() + geom_qq_line() + theme_classic() +
+      labs (title = "Mem time Q-Q- all individuals")
+p1; p2
+
+```
+
+#### Now the frequency variable (how often do you think about the memory?)  
+```{r quick-look-freq}
+quants <- quantile(mem_init_tib$mem_frequency, c(.25,.5,.75), na.rm = TRUE)
+frequency_mean <- mean(mem_init_tib$mem_frequency, na.rm = TRUE)
+p1 <- mem_init_tib %>% drop_na(mem_frequency) %>%
+  ggplot( aes(x=mem_frequency)) + geom_histogram(binwidth=1) + 
+    geom_vline(xintercept = quants, colour="red", linetype = "dashed") +
+    geom_vline(xintercept = frequency_mean, colour="black") +
+    theme_classic() + labs (title = "Mem frequency distribution- all individuals")
+p2 <- mem_init_tib %>% drop_na(mem_frequency) %>%
+    ggplot( aes(sample=mem_frequency)) + geom_qq() + geom_qq_line() + theme_classic() +
+      labs (title = "Mem frequency Q-Q- all individuals")
+p1; p2
+
+```
+
+
+# Fit the full model: vividness explained by time, smoking, and frequency
+- we get a singular fit warning - therefore, the model fit results are not interpretable.  
+- in linear mixed models, a singular fit occurs when random effect variance is estimated very near zero or collinearity between random effects is very near 1 or -1. This can occur when the data is not sufficiently informative   
+- in this case the `mem_frequency` random effect (by-subject slope) is highly negatively correlated with the by-subject intercept (possibly due to lack of variance in the mem_frequency measure)   
+- we can examine the `mem_frequency` variable more closely to see this (Q: how did we know that this might be the problem? A: During data collection we suspected that some participants did not understand this measure fully)  
+```{r fit-full-model}
+model1   = lmer(mem_vividness ~ mem_time + mem_smoking + mem_frequency + (mem_time + mem_smoking + mem_frequency| id), data=mem_init_tib)
+
+summary(model1)
+
+#plot individual frequency ratings by subject
+#mem_init_tib |> ggplot(aes(x = id, y = mem_frequency)) +
+#  geom_jitter(shape = 1, width = .1, height = 0)
+
+```
+
+## so we will delete frequency from the model  
+
+```{r freq-removed}
+model1   = lmer(mem_vividness ~ mem_time + mem_smoking  + (mem_time + mem_smoking | id), data=mem_init_tib, control = lmerControl(optimizer = "bobyqa"))
+
+summary(model1)
+
+```
+## smoking is not informative, but time explains vividness  
+- recent memories are more vivid
+- to do a significance test, let's compare a model with `mem_time` to a model with that fixed effect removed (using R's `anova()` function)  
+
+```{r}
+d <- mem_init_tib
+baseline  <- lmer(mem_vividness ~ 1 + (mem_time | id), data=d, REML = FALSE)
+model1   = lmer(mem_vividness ~ mem_time  + (mem_time | id), data=d, control = lmerControl(optimizer = "bobyqa"))
+
+summary(model1)
+anova(model1,baseline)
+```
+
+## Extra - mixed effects logistic model  
+- does the age of a memory explain whether it is smoking or not?  
+- see model below - more recent memories are likely to involve smoking  
+```{r}
+d <- mem_init_tib |> filter(mem_smoking<3) 
+d <- d |> mutate(mem_smoking = 2 - mem_smoking)
+smoke_model  <- glmer(
+  mem_smoking ~ mem_time + (mem_time |id), 
+  family = "binomial", data=d)
+summary(smoke_model)
+smoke_baseline <- glmer(
+  mem_smoking ~ 1 + (mem_time |id), 
+  family = "binomial", data=d)
+summary(smoke_baseline)
+anova(smoke_model,smoke_baseline)
+performance::r2(smoke_model)
+
+```
+
