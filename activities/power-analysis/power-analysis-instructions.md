@@ -179,7 +179,7 @@ Use these settings in G\*Power to calculate the sample size you need:
 1. *test family* = F tests  
 2. *statistical test* = ANOVA: Repeated measures, within-between interaction  
 3. *Type of power analysis* = A priori: compute required sample size  
-4. *Inputs*: alpha err prob = .05, power = .8, groups = 2, number of measurements = 2, corr among rep measures = .4. Use the effect size calculator ("Determine") to convert the given partial η<sup>2</sup> to Cohen f.   Enter 1 for the non-sphericity correction (this is the only possible value because sphericity is only relevant with more than 2 within subject measures) 
+4. *Inputs*: alpha err prob = .05, power = .8, groups = 2, number of measurements = 2, corr among rep measures = .4. Use the effect size calculator ("Determine") to convert the given partial η<sup>2</sup> to Cohen f.   Enter 1 for the non-sphericity correction (this is the only possible value because sphericity is only relevant when a within-subject factor has more than 2 levels) 
 
 Click on the "calculate" button when you are ready.
 
