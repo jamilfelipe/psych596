@@ -333,74 +333,84 @@ kbd {
 
 <h2 id="toc_0">Week 1 - Set up SPSS &amp; R with RStudio</h2>
 
-<p><em>updated Jan 24 2024</em>  </p>
+<p><em>major update August 2025 - <a href="2024-intro-essentials-instructions-spss-rstudio.html">previous version (SPSS via virtual computing, R/RStudio local system install without docker) is here</a></em>  </p>
 
-<h3 id="toc_1">1. SPSS installation/access</h3>
+<h3 id="toc_1">1. Create a local folder for your work in this class</h3>
+
+<p>It can be difficult to manage everybody&#39;s individual technology issues, so it&#39;s important to make sure we all have similar set ups. Pick a location on your computer&#39;s file system, and create a new folder called <code>psychstats596</code> - leave it empty for now.   </p>
+
+<h3 id="toc_2">2. SPSS installation/access</h3>
 
 <ul>
-<li><p>if you have access to an SPSS license, great! Follow installation and licensing instructions from wherever you got the license (e.g., <a href="https://software.rutgers.edu">software.rutgers.edu</a>) - we will be using version 29.0 in class.  </p></li>
-<li><p>if you do not have a license you can follow these instructions to use Rutgers Virtual Lab inside a browser window  </p>
-
-<ul>
-<li>  login at <a href="https://it.rutgers.edu/virtual-computer-labs/">labgateway.rutgers.edu</a> (click &quot;Log in to the labs&quot;)<br></li>
-<li>  you will see a Windows Desktop inside your browser window - you can start SPSS by typing &quot;spss&quot; into the start menu bar</li>
-<li>  <em>IMPORTANT:</em> any files you create while using the Virtual Lab will be deleted when you logout or close the window. To save files you need to transfer them to a cloud drive like <a href="https://it.rutgers.edu/box/">box.rutgers.edu</a> or Google Drive. Transfer files by opening a browser inside the Virtual Computing desktop and going to your preferred cloud account. Or set up Box so that you can save files to the &quot;Box&quot; folder within the virtual desktop<br></li>
-<li>  a good habit is to open your cloud account right after logging into a Virtual Computing session - then you can save your progress to the cloud as you go. If you are inactive for too long you will be logged out and lose any files that weren&#39;t saved to the cloud.<br></li>
-<li>  if you are using a Mac touchpad, you can right-click in the virtual session by doing a two-finger tap (but ctrl-click may not work)<br></li>
-</ul></li>
+<li>  If you are a Rutgers student you have access to an SPSS license now (wasn&#39;t always the case)! Follow installation and licensing instructions at <a href="https://software.rutgers.edu/product/3884">https://software.rutgers.edu/product/3880</a> - we will be using version 31 in class. <em>Note from the Rutgers Software site:
+The paperwork for the SPSS renewal is now with the vendor for processing, while we hope it will be completed prior to our expiration date. I can not confirm that.  However, there is a 30-day grace period for SPSS in case the paperwork is delayed past 8/31/2025.</em><br></li>
 </ul>
 
-<h5 id="toc_2">NEW! - Rutgers has added an alternative method to connect to a Virtual Computing Session. This alternative method may allow you to save files directly to your computer (we have not tested it so please explore on your own if you want to use it) - <a href="https://it.rutgers.edu/virtual-computer-labs/knowledgebase/accessing-windows-virtual-desktop/">see here for instructions</a>.</h5>
+<h3 id="toc_3">3. Install R and RStudio (two methods)</h3>
 
-<p><em>screenshot of a Virtual Computing Session</em> <img src="../images/VirtualComputing.png" alt="Virtual Computing screenshot">  </p>
-
-<h3 id="toc_3">2. Install R and RStudio on your computer</h3>
-
-<p>R is a statistical programming language. RStudio is a development environment built to make it easier to run, view, and document with the R language. R and Rstudio are open-source, so you can install them on your own.  </p>
+<p>R is a statistical programming language. RStudio is an interactive development environment (IDE) built to make it easier to run, view, and document your work that uses the R language. R and Rstudio are open-source, so you can install them on your own.  </p>
 
 <ul>
-<li><p>if you already have R and Rstudio installed, make sure you have an R version 4 or greater (e.g., 4.0.4 or higher version number), and RStudio 1.4 or greater. We will use R version 4.2.1 and RStudio version 2022.07.1    </p>
+<li><p>if you already have R and Rstudio installed, make sure you have an R version 4 or greater (e.g., 4.0.4 or higher version number), and RStudio 1.4 or greater. Class materials are tested in R version 4.3.3 and RStudio version 2023.12.1+402, with tidyverse version 2.0.0      </p>
 
 <ul>
 <li>  to check your R version, run <code>getRversion()</code> in the RStudio console<br></li>
 <li>  to check your RStudio version use the RStudio -&gt; About menu<br></li>
 </ul></li>
-<li><p><strong>To install (or update)</strong>: Follow this link to <a href="https://rstudio-education.github.io/hopr/starting.html">Garrett Grolemund&#39;s online book <em>Hands on Programming with R</em></a> to find download links and specific installation instructions for Mac, Windows, and Linux  </p>
+</ul>
+
+<p>If you already have R and RStudio installed, I still recommend running it from a docker container (see below). But if you are happy to manage package versions yourself and troubleshoot any conflicts that arise then I won&#39;t stop you.  </p>
+
+<h4 id="toc_4">3.1 Run Rstudio from a Docker container (recommended)</h4>
+
+<p>One of the biggest challenges in creating reproducable research is that any work you do on a computer (e.g., design, simulation, analysis) relies on the programs and <em>environment</em> that are particular to your computer. This means it is not always easy for someone to recreate your work A Docker container basically simulates a whole computing environment on your host computer. In this case I have created a Docker <em>image</em> for this class that you can download and run on your own computer. This <em>image</em> can be used to run a <em>container</em> that has the RStudio environment and most of the pckages you will need for class (I left some packages uninstalled so that you will have some experience installing packages).<br>
+Steps to get a container running:  </p>
 
 <ul>
-<li>  In short, first you download and install R. Then you download and install RStudio</li>
+<li>  Download <a href="https://www.docker.com/products/docker-desktop/">Docker Desktop</a> for your OS (hover over the &quot;Download Docker Desktop&quot; button). Install it (if on windows you can leave unchecked &quot;allow windows containers to be used with this installation&quot;). If on Windows you probably need to restart your computer.<br></li>
+<li><p>Now, you can pull the Docker <em>image</em> for this class and &quot;spin up a container&quot; based on the image. The <em>image</em> is called stored on hub.docker.com (the most common location for sharing docker images).    </p>
+
+<ol>
+<li>Launch the Docker Desktop application on your Mac.<br></li>
+<li>Go to the &quot;Images&quot; Tab. In the Docker Desktop interface, click on the &quot;Images&quot; tab in the left-hand sidebar.<br></li>
+<li>Search for the Image. In the &quot;Search for images on Docker Hub&quot; field at the top, type the name of the image you want to pull (e.g., nginx or myusername/my-app).<br>
+
+<ul>
+<li>If you are on a mac with a silicon arm64 processor then search for <code>jamilfelipe/psych596applearm64-rstudio_app</code>. (to check if you have an arm64 processor, open a terminal and type <code>uname -m</code> if the output is <code>arm64</code> then it is, otherwise it is an amd64 type chip.<br></li>
+<li>If you are on a computer with a amd64 processor (all others, but talk to me if you are unsure or on a Chromebook), then   search for <code>jamilfelipe/psych596amd64-rstudio_app</code><br></li>
 </ul></li>
+<li>Select the Image. From the search results, locate the image you want to pull.<br></li>
+<li>Pull the Image. Click the &quot;Pull&quot; button next to the desired tag (latest). Docker Desktop will start downloading the image, and you can monitor the progress in the interface.<br></li>
+<li>Run the image - after it downloads, click &quot;run&quot; (windows) or the triangle &quot;play&quot; (apple) button. This is what is meant by &quot;spinning up a container&quot;<br></li>
+<li>Click the expand arrow next to &quot;Optional Settings&quot;.<br></li>
+<li>Enter <code>8787</code> in the &quot;Host port&quot; text box. This will designate a port number that you will use to access the running container through a web browser (if you have multiple containers running , you will need to use a different port numbers for each).<br></li>
+<li>Under &quot;Volumes&quot; click the &quot;...&quot; and then select the folder you created earlier. In the &quot;Container path&quot; text box type <code>/home/rstudio/psychstats596</code>. Click &quot;Run&quot;.<br></li>
+<li>In the message that comes up, look for &quot;The password is set to ...&quot; and copy the password displayed.<br></li>
+<li>Now open a web browser and go to <code>localhost:8787</code> -- when the username/password box comes up enter <code>rstudio</code> for the user, and paste in the password that you copied. You should see the RStudio environment come up in the browser.<br></li>
+</ol></li>
 </ul>
 
-<h3 id="toc_4">3. Start RStudio and install essential R packages</h3>
+<p>Notes on using containers:  </p>
 
 <ul>
-<li><p>Much of what we will do in R relies on <em>packages</em>, which are openly available extensions to the R programming language. Packages contain functions, data, and documentation that you can use as needed by installing a package and loading it.  </p></li>
-<li><p>Right now, we&#39;ll install the majority of the packages that we will use this semester. By installing them all now, we will all have similar versions of each package, which will help with troubleshooting throughout the course. If you already have some of these packages installed, you can rerun the install command to (potentially) update the installed version, or you can continue with your environment as is (if you are comfortable managing package versions in your own way).  </p></li>
-<li><p>If you haven&#39;t already, start RStudio. Next, in the <em>Console</em> window pane type the <code>install.packages()</code> commands below <strong>one line at a time</strong>, being sure to match upper/lowercase (<strong>pay attention to the red text output</strong> after each command in case there are errors):  </p>
+<li>once you start a container running it will stay in your &quot;running containers&quot; list in the &quot;Containers&quot; tab in Docker Desktop. Even if you close the Browser window it will still be running in the background.<br></li>
+<li>if you encounter problems and want to restart the RStudio session, you can (increasing levels of extremity):<br>
 
-<p><strong><em>Be sure not to confuse the &quot;Console&quot; Pane with the &quot;Terminal&quot; Pane!!!</em></strong>  </p>
-
-<blockquote>
-<p><code>install.packages(&quot;remotes&quot;)</code><br>
-<code>install.packages(&quot;learnr&quot;)</code><br>
-<code>remotes::install_github(&quot;profandyfield/discovr&quot;)</code><br>
-<code>install.packages(&quot;tidyverse&quot;)</code><br>
-<code>install.packages(&quot;Hmisc&quot;)</code><br>
-<code>install.packages(&quot;afex&quot;)</code><br>
-<code>install.packages(&quot;lme4&quot;)</code><br>
-<code>install.packages(&quot;optimx&quot;)</code><br>
-<code>install.packages(&quot;effectsize&quot;)</code><br>
-<code>install.packages(&quot;correlation&quot;)</code><br>
-<code>install.packages(&quot;ggfortify&quot;)</code><br>
-<code>install.packages(&quot;kableExtra&quot;)</code><br>
-<code>install.packages(&quot;wesanderson&quot;)</code>  </p>
-</blockquote>
-
-<p><em>screenshot of the Console Pane</em> <img src="../images/ConsolePane.png" alt="Console Pane screenshot"></p></li>
+<ul>
+<li>click &quot;Session&quot;, &quot;Restart R&quot;<br></li>
+<li>type <code>quit()</code> in the console and then click &quot;Start New Session&quot;<br></li>
+<li>click &quot;restart&quot; on the container in Docker Desktop (then note the new password and refresh the browser window)<br></li>
+<li>click the &quot;trash can&quot; icon next to the container to delete it, then spin up a new container from the original image. <strong>you will lose any packages you added in the container you deleted (plus anything you did in the container that wasn&#39;t saved within the &quot;mapped&quot; <code>psychstats596</code> folder)</strong> -- see <a href="https://www.dataset.com/blog/create-docker-image/">this guide for information about writing a new image with the changes you made in the container</a><br></li>
+</ul></li>
+<li>in the RStudio environment, you won&#39;t be able to see your whole desktop filesystem, only the folder that you created (and &quot;mapped&quot; into the container as a volume).<br></li>
+<li>my standard practice is to just leave a container running indefinitely, closing the browser tab whenever I&#39;m done working for the day and coming back to it each time by opening a new browser. If my computer restarts then I just restart the container through Docker Desktop.<br></li>
 </ul>
 
-<h3 id="toc_5">4. Set up your workflow for this week&#39;s lab activity</h3>
+<h4 id="toc_5">3.2 (do this if you can&#39;t or don&#39;t want to run Docker) Install R and RStudio, then install packages one by one.</h4>
+
+<p><a href="2024-intro-essentials-instructions-spss-rstudio.html">Follow instructions here, start at #2</a></p>
+
+<h3 id="toc_6">4. Set up your workflow for this week&#39;s lab activity</h3>
 
 <p><a href="http://milton-the-cat.rocks/learnr/r/r_getting_started/#section-working-in-rstudio">This video</a> (linked in the Syllabus also) describes the workflow that we will use in class. These are the basic steps in the workflow:<br>
     1. Create a folder containing an RStudio project (<code>*.Rproj</code> file) for the lab activity each week. This week, make a folder called &quot;intro-essentials&quot; and then use <strong>File -&gt; New Project -&gt; Existing Folder</strong> to create an R project file in the &quot;intro-essentials&quot; folder. Open the project in your current session.<br>
@@ -416,12 +426,13 @@ kbd {
 <p>When you have set up your project, your RStudio environment should look something like this:<br>
 <img src="../images/full-setup.png" alt="Rstudio project"></p>
 
-<h3 id="toc_6">5. Load the first &quot;discovr&quot; tutorial</h3>
+<h3 id="toc_7">5. Load the first &quot;discovr&quot; tutorial</h3>
 
 <p>Go to the Tutorial Pane (top right) and click &quot;start tutorial&quot; for the &quot;discovr: key concepts in R (discovr_01)&quot; tutorial. <em>it will take a minute or two to load</em> - use the &quot;pop-out&quot; button <img src="../images/popout.png" alt="popout icon"> to open the tutorial in a larger view.</p>
 
 <ul>
-<li>  If you still have time left in class, go through the first section of the Discovr tutorial. It will be helpful to get familiar with the concepts of objects, functions, data types, assignment (&quot;&lt;-&quot;), and piping (&quot;%&gt;%&quot;).</li>
+<li>  If you still have time left in class, go through the first section of the Discovr tutorial. It will be helpful to get familiar with the concepts of objects, functions, data types, assignment (&quot;&lt;-&quot;), and piping (&quot;%&gt;%&quot;).<br></li>
+<li>  When you are out of time, save the Markdown file with whatever notes you have (it can be as little as &quot;I was able to save a Markdown file&quot;), and submit that file for the <a href="https://rutgers.instructure.com/courses/367674/assignments/3848573">lab activity assignment</a></li>
 </ul>
 
 
