@@ -76,9 +76,11 @@ When you have set up your project, your RStudio environment should look somethin
 ![Rstudio project](../images/full-setup.png)
 
 
-### 5. Load the first "discovr" tutorial  
+### 5. Load the first "learnr" tutorial  
 
-Go to the Tutorial Pane (top right) and click "start tutorial" for the "discovr: key concepts in R (discovr_01)" tutorial. *it will take a minute or two to load* - use the "pop-out" button ![popout icon](../images/popout.png) to open the tutorial in a larger view.
+Run this in the Console: `learnr::initialize_tutorial()`  
+
+Go to the Tutorial Pane (top right) and click "start tutorial" for the "learnr: key concepts in R (discovr_01)" tutorial. *it will take a minute or two to load* - use the "pop-out" button ![popout icon](../images/popout.png) to open the tutorial in a larger view.
 
 -   If you still have time left in class, go through the first section of the Discovr tutorial. It will be helpful to get familiar with the concepts of objects, functions, data types, assignment ("\<-"), and piping ("%\>%").  
 -   When you are out of time, save the Markdown file with whatever notes you have (it can be as little as "I was able to save a Markdown file"), and submit that file for the [lab activity assignment](https://rutgers.instructure.com/courses/367674/assignments/3848573)
