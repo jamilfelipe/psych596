@@ -417,11 +417,12 @@ Steps to get a container running:  </p>
     2. Inside the folder you made for the project, create new folders called &quot;data&quot;, &quot;r_docs&quot;, and &quot;images&quot;. You can create the folders through the <strong>Files</strong> tab in the lower right RStudio Pane, or as you normally would in Windows or MacOS.<br>
     3. Create an <strong>R Markdown file</strong> called &quot;lab-notes-intro&quot; and save it in &quot;r_docs&quot; folder. Use <strong>File -&gt;New File -&gt; R Markdown...</strong> then <strong>Save</strong> (on the RStudio menu). The markdown file will open in the top left RStudio pane - this is where you will write your R code and where you will take notes. When you reach a point where you want to share the document you can use the <strong>Knit</strong> option to generate a report containing your code, notes, and visualizations.<br>
     4. Delete the template text starting from &quot;## R Markdown&quot; down to the end of the file.<br>
-    5. Write your code inside code &quot;chunks&quot;, and run chunks in order when writing/testing code. When you want to generate a report (e.g., an html file that you can share), use the <strong>Knit</strong> button.<br>
+    5. For future activities, write your code inside code &quot;chunks&quot;, and run chunks in order when writing/testing code. When you want to generate a report (e.g., an html file that you can share), use the <strong>Knit</strong> button.<br>
             - the start of a chunk is designated by a line that starts with 3 backticks <code>`</code>  followed by <code>{r chunk-name}</code>. The end of a chunk is designated by a line with 3 backticks.<br>
             - in the &quot;setup&quot; code chunk, add this line to set the working directory (<a href="https://bookdown.org/yihui/rmarkdown-cookbook/working-directory.html">see here for explanation</a>):<br>
             <code>knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())</code><br>
-    6. Write your notes above or below code chunks. Characters like # and * are used for markdown-style formatting of the report as described <a href="https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf">in this pdf</a>.  </p>
+    6. Write your notes above or below code chunks. Characters like # and * are used for markdown-style formatting of the report as described <a href="https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf">in this pdf</a>.<br>
+    7. For this week, just write &quot;I created an R Markdown document&quot; as a note in your R Markdown file, then save it and submit the *.Rmd file in the Canvas <a href="https://rutgers.instructure.com/courses/367674/assignments/3848573">lab activity assignment</a>.  </p>
 
 <p>When you have set up your project, your RStudio environment should look something like this:<br>
 <img src="../images/full-setup.png" alt="Rstudio project"></p>
@@ -430,11 +431,10 @@ Steps to get a container running:  </p>
 
 <p>Run this in the Console: <code>learnr::initialize_tutorial()</code>  </p>
 
-<p>Go to the Tutorial Pane (top right) and click &quot;start tutorial&quot; for the &quot;learnr: key concepts in R (discovr_01)&quot; tutorial. <em>it will take a minute or two to load</em> - use the &quot;pop-out&quot; button <img src="../images/popout.png" alt="popout icon"> to open the tutorial in a larger view.</p>
+<p>Go to the Tutorial Pane (top right) and click &quot;start tutorial&quot; for any tutorial that interests you. <em>it will take a minute or two to load</em> - use the &quot;pop-out&quot; button <img src="../images/popout.png" alt="popout icon"> to open the tutorial in a larger view.</p>
 
 <ul>
-<li>  If you still have time left in class, go through the first section of the Discovr tutorial. It will be helpful to get familiar with the concepts of objects, functions, data types, assignment (&quot;&lt;-&quot;), and piping (&quot;%&gt;%&quot;).<br></li>
-<li>  When you are out of time, save the Markdown file with whatever notes you have (it can be as little as &quot;I was able to save a Markdown file&quot;), and submit that file for the <a href="https://rutgers.instructure.com/courses/367674/assignments/3848573">lab activity assignment</a></li>
+<li>  If you still have time left in class, go through a little bit of the tutorial. It will be helpful to get familiar with the concepts of objects, functions, data types, assignment (&quot;&lt;-&quot;), and piping (&quot;%&gt;%&quot;).<br></li>
 </ul>
 
 

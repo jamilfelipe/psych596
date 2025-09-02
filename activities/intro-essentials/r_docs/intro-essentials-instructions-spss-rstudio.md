@@ -66,11 +66,12 @@ Notes on using containers:
     2. Inside the folder you made for the project, create new folders called "data", "r\_docs", and "images". You can create the folders through the **Files** tab in the lower right RStudio Pane, or as you normally would in Windows or MacOS.    
     3. Create an **R Markdown file** called "lab-notes-intro" and save it in "r\_docs" folder. Use **File -\>New File -\> R Markdown...** then **Save** (on the RStudio menu). The markdown file will open in the top left RStudio pane - this is where you will write your R code and where you will take notes. When you reach a point where you want to share the document you can use the **Knit** option to generate a report containing your code, notes, and visualizations.  
     4. Delete the template text starting from "## R Markdown" down to the end of the file.  
-    5. Write your code inside code "chunks", and run chunks in order when writing/testing code. When you want to generate a report (e.g., an html file that you can share), use the **Knit** button.  
+    5. For future activities, write your code inside code "chunks", and run chunks in order when writing/testing code. When you want to generate a report (e.g., an html file that you can share), use the **Knit** button.  
     	    - the start of a chunk is designated by a line that starts with 3 backticks `` ` ``  followed by `{r chunk-name}`. The end of a chunk is designated by a line with 3 backticks.  
     	    - in the "setup" code chunk, add this line to set the working directory ([see here for explanation](https://bookdown.org/yihui/rmarkdown-cookbook/working-directory.html)):  
     	    `knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())`   
     6. Write your notes above or below code chunks. Characters like \# and \* are used for markdown-style formatting of the report as described [in this pdf](https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf).  
+    7. For this week, just write "I created an R Markdown document" as a note in your R Markdown file, then save it and submit the *.Rmd file in the Canvas [lab activity assignment](https://rutgers.instructure.com/courses/367674/assignments/3848573).  
 
 When you have set up your project, your RStudio environment should look something like this:  
 ![Rstudio project](../images/full-setup.png)
@@ -80,7 +81,6 @@ When you have set up your project, your RStudio environment should look somethin
 
 Run this in the Console: `learnr::initialize_tutorial()`  
 
-Go to the Tutorial Pane (top right) and click "start tutorial" for the "learnr: key concepts in R (discovr_01)" tutorial. *it will take a minute or two to load* - use the "pop-out" button ![popout icon](../images/popout.png) to open the tutorial in a larger view.
+Go to the Tutorial Pane (top right) and click "start tutorial" for any tutorial that interests you. *it will take a minute or two to load* - use the "pop-out" button ![popout icon](../images/popout.png) to open the tutorial in a larger view.
 
--   If you still have time left in class, go through the first section of the Discovr tutorial. It will be helpful to get familiar with the concepts of objects, functions, data types, assignment ("\<-"), and piping ("%\>%").  
--   When you are out of time, save the Markdown file with whatever notes you have (it can be as little as "I was able to save a Markdown file"), and submit that file for the [lab activity assignment](https://rutgers.instructure.com/courses/367674/assignments/3848573)
+-   If you still have time left in class, go through a little bit of the tutorial. It will be helpful to get familiar with the concepts of objects, functions, data types, assignment ("\<-"), and piping ("%\>%").  
