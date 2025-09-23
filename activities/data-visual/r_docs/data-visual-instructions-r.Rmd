@@ -186,7 +186,7 @@ p3a
 2. the plotting command is all in the block of code (part C) containing the `ggplot()` function - `mrot_summary %>%` sends the summary stats to the ggplot() functions.   
 3. `ggplot(aes(x = Angle, y = meanRT))` sets the "Angle" column of the data to the x-axis and the "meanRT" column to the y-axis. These are called "aesthetics" (hence the `aes()` function) in ggplot terminology.  
 
-4. After the main `ggplot()` function we add "layers". The main layer is the bars that are created by `geom_bar()`. We specify `stat = "identity"` because the statistic we want to plot is already calculated in the `mrot_summary` tibble the we sent as input to ggplot(). If instead we sent a tibble of participant-wise means, we could specify `stat = "summary", fun = "mean"` to have ggplot compute the group means.  
+4. After the main `ggplot()` function we add "layers". The main layer is the bars that are created by `geom_bar()`. We specify `stat = "identity"` because the statistic we want to plot is already calculated in the `mrot_summary` tibble that we sent as input to ggplot(). If instead we sent a tibble of participant-wise means, we could specify `stat = "summary", fun = "mean"` to have ggplot compute the group means.  
 
 5. `coord_cartesian(ylim = c(0, 4500))` controls the range of the y-axis (we could add `xlim =` if we wanted to). `labs()` controls the labels. `theme_classic` is one of many options for themes that specify color, font, positioning, etc.  
 
