@@ -1,7 +1,7 @@
 ---
 title: "Associations between variables"
 author: "grad-stats"
-date: "2022-02-14"
+date: "2025-09-30"
 output: html_document
 ---
 
@@ -57,9 +57,11 @@ This is subset of a public dataset of lumosity (a cognitive training website) us
   - `pretest_score` (test at start of the training program) has been transformed to have a mean of 100 and standard deviation of 15 (this is a typical transformation for IQ scores)  
 
 **First install 3 packages:** in the console (**not in your markdown doc**) type each of these commands to install the needed packages:  
+  - `install.packages("correlation")`  
   - `install.packages("gmodels")`  
   - depending on your settings, installing "gmodels" will also install "DescTools", but if not then run `install.packages("DescTools")`  
   - `install.packages("ppcor")`  
+To do the "extra" part of the activities you will lso need the packages "ggpubr" and "sjPlot"    
 
 **What to do next:**  
 1. Edit your "setup" code chunk to add these lines:  
