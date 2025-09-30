@@ -300,10 +300,19 @@ Sometimes we want to look at associations between nominal variables, but we can'
 <div id="step5a" class="collapse">
 ```{r Step-5a, fig.show='hold', results='hold', message=FALSE}
 # contingency table
-conting_table <- lumos_tib %>% 
-  filter(edu_cat != "unspecified" & english_nativelang != "unspecified") %>%
+conting_table <- lumos_tib %>%   
+  filter(edu_cat != "unspecified" & english_nativelang != "unspecified") %>% 
   {gmodels::CrossTable(.$edu_cat, .$english_nativelang, expected=TRUE,
                        prop.t=FALSE, prop.c=FALSE, prop.r = FALSE)}
+
+# The confusing {.$blahblah} syntax is required because gmodels is not a tidyverse function, and is not designed to accept the pipe input in a way that allows you to refer to specific columns. We encountered this issue in the import-examine activity (and used the "pull" function to get around it, but that only works for 1 column). Here is a difference strategy where we use a different kind of pipe ("exposed pipe": %$% - it "exposes" the column names to the function), which is part of the "magrittr" package  
+library("magrittr")
+conting_table <- lumos_tib %>%   
+  filter(edu_cat != "unspecified" & english_nativelang != "unspecified") %$% 
+  gmodels::CrossTable(edu_cat, english_nativelang, expected=TRUE,
+                       prop.t=FALSE, prop.c=FALSE, prop.r = FALSE)
+
+
 ```
 </div>
 &nbsp;
@@ -392,10 +401,10 @@ semipart <- lumos_tib %>% drop_na(age,raw_score,pretest_score) %>%
                     x=.$age, y=.$raw_score, z=.$pretest_score)}
 print("semi-partial correlation: x=age, y=raw_score, z=pretest_score")
 print(semipart)
-# partial
-partcor <- lumos_tib %>% drop_na(age,raw_score,pretest_score) %>% 
-  {ppcor::pcor.test(method = "pearson", 
-                    x=.$age, y=.$raw_score, z=.$pretest_score)}
+# partial (this time using "exposed pipe" %$% syntax)
+partcor <- lumos_tib %>% drop_na(age,raw_score,pretest_score) %$% 
+  ppcor::pcor.test(method = "pearson", 
+                    x=age, y=raw_score, z=pretest_score)
 print("partial correlation: x=age, y=raw_score, z=pretest_score")
 print(partcor)
 
