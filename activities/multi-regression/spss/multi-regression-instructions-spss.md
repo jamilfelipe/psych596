@@ -1,5 +1,5 @@
 # Associations between variables: Multiple Regression in SPSS  
-*edited Feb 21, 2024*  
+*edited Oct 6, 2025*  
 *Jamil Palacios Bhanji*  
 
 ## Goals for today  

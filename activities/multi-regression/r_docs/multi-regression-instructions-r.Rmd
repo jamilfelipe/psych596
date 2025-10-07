@@ -1,7 +1,7 @@
 ---
 title: "Multiple Regression and Logistic Regression in R"
 author: "Bhanji - Statistical Methods"
-date: 2024-02-21
+date: 2025-10-06
 output:
   html_document: default
 always_allow_html: true
@@ -99,7 +99,7 @@ lumos_tib <- lumos_tib %>% dplyr::mutate(
 
 #### Above is the decision process chart from the book.  
 
-- It says we should start by using scatter plots to check for non-linear associations and unusual cases. 
+- It says we should start by using scatter plots to check for non-linear associations and extreme cases. 
 - Last week we looked at scatter plots  of pretest_score, raw_score, and age. The linearity assumption was reasonable and there were no concerning outliers, but let's use a shortcut to recreate those scatter plots all at once. Use the function `GGally::ggscatmat()` like in the code below.  
 
 <button class="btn btn-primary" data-toggle="collapse" data-target="#step-3"> Show/Hide Solution </button>  
