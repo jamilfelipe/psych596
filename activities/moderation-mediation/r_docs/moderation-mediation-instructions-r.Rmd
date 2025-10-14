@@ -1,7 +1,7 @@
 ---
 title: "Moderation and Mediation Models - Using RStudio"
 author: "Jamil Palacios Bhanji with Vanessa Lobue"
-date: "2024-02-29"
+date: "2025-10-14"
 output: html_document
 ---
 
@@ -40,7 +40,7 @@ source("r_docs/process.R", local = knitr::knit_global())
   
   - in the console, install the "interactions" package by running `install.packages("interactions")` - we will use functions in this package for simple slopes analysis and plots that will help us interpret interaction effects.    
   - in the console, install the "car" package by running `install.packages("car")` - we will use a function in this package to get some extra regression output.    
-
+  - in the console, install the "car" package by running `install.packages("sandwich")` - this package is used by functions in the `car` package to calculate standard error of coefficients.  
 
 ## Step 1 (Moderation) - Add an interaction term to a linear regression model  
 
@@ -215,7 +215,7 @@ We use these three models to check four conditions of mediation (section 11.4.2 
 #### Step 2.0 - Setup: download and source `process.R`    
 
 - We will use the `process()` function in an R script developed by Andrew Hayes to test our mediation model. Unlike all the functions we have used before, this function is not contained in an R package, so we can't use `install.packages()`. Instead, we need to download an R-script that has the code for the `process()` function, then *source* the script (*source* just means run the code within your current environment) to make the function available within your project environment. Here is how to do that:  
-    1. go to [https://www.processmacro.org/download.html](https://www.processmacro.org/download.html) and download the zip file available at the bottom of the page.
+    1. go to [https://www.processmacro.org/download.html](https://www.processmacro.org/download.html) and download the zip file by clicking the button at the bottom of the page, then continuing to the "Resource Hub" tab.
     2. unzip the file (it is probably downloaded to your "Downloads" folder if you are not sure where it went) - be sure that you actually unzip the file rather than just view the contents.  
     3. inside the unzipped folder you will find a folder called "PROCESS v4.0 for R". Move that folder to a location on your computer that makes sense to you. E.g., a folder called "R-general-tools" in your "activities" folder (remember where you put it).  
     4. in your currently open RStudio project for this activity, go to File-\>Open File, and go to the "PROCESS v4.0 for R" wherever you saved it, then open the file called "process.R"  
