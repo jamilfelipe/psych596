@@ -5,7 +5,7 @@ output:
   html_document: default
 always_allow_html: true
 ---
-*last edited 2024-02-09*
+*last edited 2025-10-20*
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
@@ -45,8 +45,6 @@ library(tidyverse)
   `knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())`   
   `library(tidyverse)`  
 - run the setup code chunk   
-- In the RStudio console, install the packages you'll need today with the install.packages() command:
-  - `install.packages("effectsize")`  
 
 ------------------------------------------------------------------------
 
@@ -355,10 +353,6 @@ t.test(formula = Hire_Rating ~ condition_factor, data = ratings_rm_tib,
 </div>
 &nbsp;
 
-##### Did you get an error message saying you can't use "paired = TRUE" with the formula method?  
-This is caused by a change between version 0.8.5 and 0.8.6 of the "effectsize" package. The fix, which will come in 0.8.7 (not available on CRAN when this was written), will be to use a new function called `repeated_measures_d()`. For now, the solution is to downgrade your "effectsize" package version to 0.8.5. Use this command *in the console* (install the `remotes` package if you don't already have it):  
-`install_version("effectsize", version = "0.8.5", repos = "http://cran.us.r-project.org")`  
-
 #### Why is the paired comparison so different if most of the points are the same?
 - With this design, *observations are not independent*. Each observation is related to another observation from the same recruiter. 
 - So our model (of the difference between conditions) actually has only 18 independent observations because we are using the difference between `audio` and `text` hiring ratings for each recruiter (17 degrees of freedom because we estimate one parameter, the mean difference between conditions).  
@@ -389,8 +383,11 @@ This is caused by a change between version 0.8.5 and 0.8.6 of the "effectsize" p
   4. whether you want pooled variance across the groups (`pooled_sd = TRUE` for #1, it is irrelevant for #2)  
   5. `alternative = "two.sided"` to get a two sided confidence interval   
 
+**try it now in your Rmd doc**  
 
-**try it now in your Rmd doc**
+##### Did you get an error message saying you can't use "paired = TRUE" with the formula method?  
+This is caused by a change between version 0.8.5 and 0.8.6 of the "effectsize" package. Similar errors may occur in different functions when you try to use the formula syntax `y ~ x` with the paired = TRUE option. This error is meant to prevent people from using the formula syntax when their data are not sorted (notice that the formula does not include the `pnum_rm` value that defines how observations are paired).  
+One solution is to use `x = ` and `y = ` and select audio and text condition values separately instead of formula syntax. Check the solution code to see exactly how.   
 
 <button class="btn btn-primary" data-toggle="collapse" data-target="#step8"> Show/Hide Solution </button>  
 <div id="step8" class="collapse">  
@@ -400,12 +397,24 @@ effectsize::cohens_d(Hire_Rating ~ condition_factor, data = ratings_rm_tib,
                      pooled_sd = TRUE, paired = FALSE, alternative = "two.sided") |>     
   knitr::kable(caption = "Effect size Cohen's d (pooled)", digits = 3) |> 
   kableExtra::kable_styling(full_width = FALSE)
-#2 - the data must be sorted by pnum_rm, so it doesn't hurt to repeat the arrange() function here
+#2 -it doesn't hurt to repeat the arrange() function here
 ratings_rm_tib <- ratings_rm_tib |> dplyr::arrange(pnum_rm) 
-effectsize::cohens_d(Hire_Rating ~ condition_factor, data = ratings_rm_tib, 
-                     pooled_sd = FALSE, paired = TRUE, alternative = "two.sided") |>     
+effectsize::cohens_d(
+  x = ratings_rm_tib$Hire_Rating[ratings_rm_tib$condition_factor == "audio"],
+  y = ratings_rm_tib$Hire_Rating[ratings_rm_tib$condition_factor == "text"],
+  pooled_sd = FALSE, paired = TRUE, alternative = "two.sided") |>     
   knitr::kable(caption = "Effect size Cohen's dz (dependent)", digits = 3) |> 
   kableExtra::kable_styling(full_width = FALSE)
+
+### another approach - use the repeated_measures_d() function, but this gives a slightly different answer even though the documentation says it uses the same calculation
+# effectsize::repeated_measures_d(Hire_Rating ~ condition_factor | pnum_rm,
+#                                 data = ratings_rm_tib,
+#                                 pooled_sd = FALSE,
+#                                 paired = TRUE,
+#                                 alternative = "two.sided",
+#                                 method = "z") |>
+#   knitr::kable(caption = "Effect size Cohen's dz using repeated_measures_d()", digits = 3) |>
+#   kableExtra::kable_styling(full_width = FALSE)
 
 ```
 
@@ -466,7 +475,7 @@ cat(sprintf("\nEffect size for rank sum comparison:\nZ = %.3f, r = %.3f", WtestZ
 ### Wrapping up  
 Some things to think about and explore:  
 - How would you depict the findings in the between-subjects design example? In the within-subjects design example?  
-    - check out [Figure 7](https://journals.sagepub.com/cms/10.1177/0956797615572906/asset/images/large/10.1177_0956797615572906-fig7.jpeg) to see how [Schroeder & Epley (2015)](https://doi.org/10.1177/0956797615572906) depicted the between-subjects data in their paper.  
+    - check out [Figure 7](https://journals-sagepub-com.proxy.libraries.rutgers.edu/cms/10.1177/0956797615572906/asset/600417a7-39f4-4a6f-961c-f1a1917b30fc/assets/images/large/10.1177_0956797615572906-fig7.jpg) to see how [Schroeder & Epley (2015)](https://doi.org/10.1177/0956797615572906) depicted the between-subjects data in their paper.  
     - for an example of plotting data from a within-subjects design, check out [Figure 2a](https://journals.sagepub.com/stoken/default+domain/d5HcBHg85XamSXGdYqYN/full#fig2-0956797615626691) in [Mehr, Song, & Spelke (2016)](https://doi.org/10.1177/0956797615626691)
 
 
