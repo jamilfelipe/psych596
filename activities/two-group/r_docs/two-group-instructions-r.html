@@ -1430,10 +1430,9 @@ effectsize::cohens_d(
   knitr::kable(caption = &quot;Effect size Cohen&#39;s dz (dependent)&quot;, digits = 3) |&gt; 
   kableExtra::kable_styling(full_width = FALSE)</code></pre>
 <pre><code>## For paired samples, &#39;repeated_measures_d()&#39; provides more options.</code></pre>
-<pre class="r"><code>### another approach - use the repeated_measures_d() function, but this gives a slightly different answer even though the documentation says it uses the same calculation
+<pre class="r"><code>### another approach - use the repeated_measures_d() function, but this gives a hedge&#39;s corrected dz  even though the documentation says it gives dz
 # effectsize::repeated_measures_d(Hire_Rating ~ condition_factor | pnum_rm,
 #                                 data = ratings_rm_tib,
-#                                 pooled_sd = FALSE,
 #                                 paired = TRUE,
 #                                 alternative = &quot;two.sided&quot;,
 #                                 method = &quot;z&quot;) |&gt;
@@ -1625,7 +1624,7 @@ cat(sprintf(&quot;\nEffect size for rank sum comparison:\nZ = %.3f, r = %.3f&quo
 <p>Some things to think about and explore:<br />
 - How would you depict the findings in the between-subjects design
 example? In the within-subjects design example?<br />
-- check out <a href="https://journals.sagepub.com/cms/10.1177/0956797615572906/asset/images/large/10.1177_0956797615572906-fig7.jpeg">Figure
+- check out <a href="https://journals-sagepub-com.proxy.libraries.rutgers.edu/cms/10.1177/0956797615572906/asset/600417a7-39f4-4a6f-961c-f1a1917b30fc/assets/images/large/10.1177_0956797615572906-fig7.jpg">Figure
 7</a> to see how <a href="https://doi.org/10.1177/0956797615572906">Schroeder &amp; Epley
 (2015)</a> depicted the between-subjects data in their paper.<br />
 - for an example of plotting data from a within-subjects design, check

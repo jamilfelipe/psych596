@@ -406,10 +406,9 @@ effectsize::cohens_d(
   knitr::kable(caption = "Effect size Cohen's dz (dependent)", digits = 3) |> 
   kableExtra::kable_styling(full_width = FALSE)
 
-### another approach - use the repeated_measures_d() function, but this gives a slightly different answer even though the documentation says it uses the same calculation
+### another approach - use the repeated_measures_d() function, but this gives a hedge's corrected dz  even though the documentation says it gives dz
 # effectsize::repeated_measures_d(Hire_Rating ~ condition_factor | pnum_rm,
 #                                 data = ratings_rm_tib,
-#                                 pooled_sd = FALSE,
 #                                 paired = TRUE,
 #                                 alternative = "two.sided",
 #                                 method = "z") |>
