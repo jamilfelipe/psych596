@@ -126,8 +126,7 @@ ratings_tib |> group_by(condition_factor) |>
     sd = sd(Hire_Rating),
     cases = n() - sum(is.na(Hire_Rating))
   ) |> 
-    knitr::kable(caption = "Hire Rating Descriptives by Group", digits = 3) |> 
-    kableExtra::kable_styling(full_width = FALSE)
+    knitr::kable(caption = "Hire Rating Descriptives by Group", digits = 3)
 
 p1; p2; p3
 ```
@@ -206,14 +205,11 @@ ratings_tib <- ratings_tib  |> mutate(
 # pooled variance cohen's d
 effectsize::cohens_d(Hire_Rating ~ condition_factor, data = ratings_tib, pooled_sd = TRUE, 
                      paired = FALSE, alternative = "two.sided") |>     
-  knitr::kable(caption = "Effect size Cohen's d (pooled)", digits = 3) |> 
-  kableExtra::kable_styling(full_width = FALSE)
-
+  knitr::kable(caption = "Effect size Cohen's d (pooled)", digits = 3) 
 # pooled variance hedge's g
 # effectsize::hedges_g(Hire_Rating ~ condition_factor, data = ratings_tib, pooled_sd = TRUE, 
 #                      paired = FALSE, alternative = "two.sided") |>     
-#   knitr::kable(caption = "Effect size Hedge's g", digits = 3) |> 
-#   kableExtra::kable_styling(full_width = FALSE)
+#   knitr::kable(caption = "Effect size Hedge's g", digits = 3)
 
 ```
 
@@ -395,16 +391,14 @@ One solution is to use `x = ` and `y = ` and select audio and text condition val
 #1
 effectsize::cohens_d(Hire_Rating ~ condition_factor, data = ratings_rm_tib, 
                      pooled_sd = TRUE, paired = FALSE, alternative = "two.sided") |>     
-  knitr::kable(caption = "Effect size Cohen's d (pooled)", digits = 3) |> 
-  kableExtra::kable_styling(full_width = FALSE)
+  knitr::kable(caption = "Effect size Cohen's d (pooled)", digits = 3) 
 #2 -it doesn't hurt to repeat the arrange() function here
 ratings_rm_tib <- ratings_rm_tib |> dplyr::arrange(pnum_rm) 
 effectsize::cohens_d(
   x = ratings_rm_tib$Hire_Rating[ratings_rm_tib$condition_factor == "audio"],
   y = ratings_rm_tib$Hire_Rating[ratings_rm_tib$condition_factor == "text"],
   pooled_sd = FALSE, paired = TRUE, alternative = "two.sided") |>     
-  knitr::kable(caption = "Effect size Cohen's dz (dependent)", digits = 3) |> 
-  kableExtra::kable_styling(full_width = FALSE)
+  knitr::kable(caption = "Effect size Cohen's dz (dependent)", digits = 3) 
 
 ### another approach - use the repeated_measures_d() function, but this gives a hedge's corrected dz  even though the documentation says it gives dz
 # effectsize::repeated_measures_d(Hire_Rating ~ condition_factor | pnum_rm,
@@ -412,8 +406,7 @@ effectsize::cohens_d(
 #                                 paired = TRUE,
 #                                 alternative = "two.sided",
 #                                 method = "z") |>
-#   knitr::kable(caption = "Effect size Cohen's dz using repeated_measures_d()", digits = 3) |>
-#   kableExtra::kable_styling(full_width = FALSE)
+#   knitr::kable(caption = "Effect size Cohen's dz using repeated_measures_d()", digits = 3)
 
 ```
 
