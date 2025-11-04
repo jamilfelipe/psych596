@@ -5,6 +5,7 @@ output:
   html_document: default
 always_allow_html: true
 ---
+*updated Nov 3, 2025*
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -43,7 +44,7 @@ Learn how to compare means of a continuous outcome from several independent grou
   `library(tidyverse)`  
 
   - run the setup code chunk (the necessary `library()` statements are in there)  
-  - run `install.packages("afex")` and `install.packages("emmeans")`in the console if you don't have those packages installed  
+  - run `install.packages("emmeans")` and `install.packages("psych")`in the console if you don't have those packages installed  
 
 
 ------------------------------------------------------------------------  
@@ -55,9 +56,9 @@ Learn how to compare means of a continuous outcome from several independent grou
 - data description: `oveis-etal-2020.csv` is shared data from the publication [Oveis, C., Gu, Y., Ocampo, J. M., Hangen, E. J., & Jamieson, J. P. (2020). Emotion regulation contagion: Stress reappraisal promotes challenge responses in teammates. Journal of Experimental Psychology: General, 149(11), 2187.](https://doi.org/10.1037/xge0000757)  
 
   - in this study, participants were randomly assigned to one of six cells in a 3 X 2 factorial design. The explanation here will be brief and we will use simplified labels for the conditions - please refer to the publication for a full study description.  
-  - DV and covariate:  
-      1. `card_out_react_prep` - Cardiac output during interaction with a partner (preparing for a marketing pitch about a hypothetical product). Higher cardiac output is thought to represent an interpretation of a stressor as a "challenge" (as opposed to a threat; e.g., [Mendes, et al., 2001](https://doi.org/10.1002/ejsp.80))   
-      2. `prepIOS_cent` - closeness rating (mean centered). participants rated how connected they felt to their partner during the interaction (higher values indicate greater connectedness)   
+  - measured variables:  
+      1. (Primary DV) `card_out_react_prep` - Cardiac output during interaction with a partner (preparing for a marketing pitch about a hypothetical product). Higher cardiac output is thought to represent an interpretation of a stressor as a "challenge" (as opposed to a threat; e.g., [Mendes, et al., 2001](https://doi.org/10.1002/ejsp.80))   
+      2. (covariate) `prepIOS_cent` - closeness rating (mean centered). participants rated how connected they felt to their partner during the interaction (higher values indicate greater connectedness)   
   - IVs:  
       1. Emotion regulation condition (`emoreg_cond`) - participants were randomly assigned to one of three groups: control=no emotion regulation instruction, suppress=instructions to suppress displays of emotion, reappraise=instructions to think about feelings of stress/arousal as a helpful part of their body's response that prepares itself for a challenge   
       2. Instruction Target (`direct_cond`) - participants were randomly assigned to receive the emotion regulation instruction directly ("self" condition) or interact with a partner who received the emotion regulation instruction ("partner" condition - they never receive the instruction directly)   
@@ -69,7 +70,6 @@ Learn how to compare means of a continuous outcome from several independent grou
     - `direct_cond` should be a factor (with 2 levels)  
 3. Then get descriptives for the DV `card_out_react_prep` and the covariate `prepIOS_cent`, organized by just the first IV `emoreg_cond` - use `psych::describeBy()` or `dplyr::summarise()`  
     - there are no missing cases in this data (this is a subset of the original dataset) but you should be mindful of missing cases when working with your own data   
-    - note: if you choose to use `psych::describeBy()` you will get an error if you only ask for descriptives for a single column (so be sure to send both `card_out_react_prep` and `prepIOS_cent` to the function - see code below)  
 4. We are going to start by considering only 1 of the categorical IVs, `emoreg_cond`. Group the data by just this first IV and check the distribution shape (for a normal-ish shape) and potential outliers for the DV (histogram and boxplot)    
     - tip: to split a histogram into a separate plot for each group, use `facet_wrap(~emoreg_cond)` as an added layer to the ggplot code (see example solution)  
 
@@ -80,26 +80,25 @@ Learn how to compare means of a continuous outcome from several independent grou
 # 1. first import the data
 emo_tib <- readr::read_csv("data/oveis-2020-recoded-data.csv", na = "NA")
 # 2. now make sure the columns we want as factors are treated that way, using forcats::as_factor()
-#while you're at it, reorder the levels of 
-emo_tib <- emo_tib %>% dplyr::mutate(
-  emoreg_cond = forcats::as_factor(emoreg_cond) %>% 
+#while you're at it, reorder the levels of emoreg_cond 
+emo_tib <- emo_tib |> dplyr::mutate(
+  emoreg_cond = forcats::as_factor(emoreg_cond) |> 
     forcats::fct_relevel("control","suppress","reappraise"),
   direct_cond = forcats::as_factor(direct_cond) 
 )
 
 # 3. descriptives by emoreg_cond group
-emo_tib %>% select(card_out_react_prep, prepIOS_cent, emoreg_cond) %>%
-  psych::describeBy(card_out_react_prep + prepIOS_cent ~ emoreg_cond, data = ., mat = TRUE) %>% 
-  knitr::kable(caption = "Cardiac Output and partner closeness by Emotion Regulation Condition", digits = 3) %>% 
-  kableExtra::kable_classic(lightable_options = "hover")  
+emo_tib |>  select(card_out_react_prep, prepIOS_cent, emoreg_cond)  |> 
+  psych::describeBy(card_out_react_prep + prepIOS_cent ~ emoreg_cond, data = _, mat = TRUE) |>  
+  knitr::kable(caption = "Cardiac Output and partner closeness by Emotion Regulation Condition", digits = 3) 
 
 # 4. look at the data
-p1 <- emo_tib %>% ggplot( aes(x = card_out_react_prep)) + 
+p1 <- emo_tib |> ggplot( aes(x = card_out_react_prep)) + 
   geom_histogram(position = "identity", bins = 15) +  
   facet_wrap( ~ emoreg_cond) +
   theme_classic()
 p1
-p2 <- emo_tib %>% ggplot( aes(x = emoreg_cond, y = card_out_react_prep)) + 
+p2 <- emo_tib |> ggplot( aes(x = emoreg_cond, y = card_out_react_prep)) + 
   geom_boxplot(position = "identity") +  
   theme_classic()
 p2
@@ -123,13 +122,12 @@ Look at the solution below and make it work for you, then let's think about the 
 <button class="btn btn-primary" data-toggle="collapse" data-target="#step-3a"> Show/Hide Solution </button>  
 <div id="step-3a" class="collapse">
 ```{r Step3a,fig.show='hold', results='hold'}
-card_lm <- emo_tib %>% 
+card_lm <- emo_tib |> 
   lm(formula = card_out_react_prep ~ emoreg_cond)
 anova(card_lm)
 effectsize::eta_squared(card_lm, ci = .95, partial = FALSE, 
-                        alternative = "two.sided") %>% 
-  kableExtra::kbl(caption = "Effect size", digits = 4) %>% 
-  kableExtra::kable_styling(full_width = FALSE)
+                        alternative = "two.sided") |> 
+  knitr::kable(caption = "Effect size", digits = 4)
 ```
 </div>
 
@@ -150,13 +148,13 @@ summary(card_lm)
   2. The overall F-stat and p-value are the same as what you got from the `anova()` function.  
   3. But now you see a Coefficients table with rows for the intercept and 2 predictors (`emoreg_condsuppress` and `emoreg_condreappraise`)  
       - The intercept has the same meaning that it had in our linear regression examples. It is the predicted value of the DV when the values of all predictors are zero. But what does it mean for a categorical predictor to have a value of zero?  
-      - The answer is that it depends on how the categorical variable is "coded". To estimate the `lm()` model, R recodes the 3-level categorical variable into 2 numerical columns (always the number of levels minus 1), and uses those numerical "contrasts" as predictors in a linear regression model ( DV = intercept + B<sub>1</sub>(contrast1) + B<sub>2</sub>(contrast2)). By default, R will use a "treatment" coding scheme (also called "dummy" coding) where the second level ("suppress") gets a value of 1 in contrast1 (0 in contrast2) and the third level gets a value of 1 in contrast2 (0 in contrast1). 
+      - The answer is that it depends on how the categorical variable is "coded". To estimate the `lm()` model, R recodes the 3-level categorical variable into 2 numerical columns (always the number of levels minus 1), and uses those numerical "contrasts" as predictors in a linear regression model ( DV = intercept + B<sub>1</sub>(contrast1) + B<sub>2</sub>(contrast2)). By default, R will use a "treatment" coding scheme (also called "dummy" coding) where the first level is designated as the "reference level" (0 in contrast1 and in contrast2), the second level ("suppress") gets a value of 1 in contrast1 (0 in contrast2) and the third level gets a value of 1 in contrast2 (0 in contrast1). 
       - Run the command `contrasts(emo_tib$emoreg_cond)` to see how R has coded the categorical variable. Notice that first level gets a value of 0 in both contrasts- this is called the "reference level". This means that the intercept is the mean of the reference level (you can go back to your descriptives above and verify that the mean cardiac output for the "control" group is -.26, same as the intercept in our model output) - this is true because the intercept is the predicted value when the two predictors (contrasts) are both zero.  
-      - The two contrasts in the model `summary()` output get named by the factor name and the contrast name put together. The coefficient for each contrast represents (just like in linear regression) the predicted change in DV for a one unit change in the IV. So for contrast1 (emoreg_condsuppress) a one unit change is the difference between the reference level ("control") and the second level ("suppress"). This means that adding the coefficient (.126) to the intercept (-.258) should give you the mean of the "suppress" group (-.132) - the math checks out. Likewise, the coefficient for contrast2 (emoreg_condreappraise) represents the difference between the reference group ("control") and the third level ("reappraise").  
+      - The two contrasts in the model `summary()` output get named by the factor name and the contrast name put together. The coefficient for each contrast represents (just like in linear regression) the predicted change in DV for a one unit change in the IV. So for contrast1 (emoreg_condsuppress) a one unit change is the difference between the reference level ("control") and the second level ("suppress"). This means that adding the coefficient (.126) to the intercept (-.258) should give you the mean of the "suppress" group (-.132) - the math checks out. Likewise, the coefficient for contrast2 (emoreg_condreappraise) represents the difference between the reference group ("control") and the third level ("reappraise"). Also, notice that the intercept (-.258) is the mean of the reference level.    
       - The t-value and Pr(>|t|) (p-value) for each contrast have the same meaning as in linear regression, and allow you to make inferences based on the contrasts. The p-value represents the probability of getting a t-stat at least that far from 0 under the null hypothesis that the true contrast coefficient is 0.  
-      - So, for contrast1 (emoreg_condsuppress), the p-value of .3398 means it is not surprising to observe a contrast coefficient that far from 0 under the null hypothesis. The contrast represents the difference between "control" and "suppress" groups, so we would fail to reject the null hypothesis that those two groups have the same mean cardiac output in this paradigm.  
+      - So, for contrast1 (emoreg_condsuppress), the p-value of .3398 means it is not surprising to observe a contrast coefficient that far from 0 under the null hypothesis that the true coefficient is 0 in the population. The contrast represents the difference between "control" and "suppress" groups, so we would fail to reject the null hypothesis that those two groups have the same mean cardiac output in this paradigm.  
       - For contrast2 (emoreg_condreappraise), the p-value of .000048 (4.76e-05) means it is unlikely to observe a contrast coefficient that far from 0 under the null, so we have reason to reject the null hypothesis that the "control" and "reappraise" groups do not differ.  
-      - Contrasts from this "treatment"/"dummy" contrast coding scheme are not orthogonal. A consequence of non-orthogonal contrasts is that they are not independent (e.g., [suppress vs control] and [reappraise vs control] effects may both be driven by a low control group mean.  
+      - Contrasts from this "treatment"/"dummy" contrast coding scheme are not **orthogonal**. A consequence of non-orthogonal contrasts is that they are not independent (e.g., [suppress vs control] and [reappraise vs control] effects may both be driven by a low control group mean.  
       
 #### Step 3.3 - other contrast coding schemes  
 Notice that the contrasts above don't give us a comparison between "suppress" and "reappraise" groups. In planned contrasts, we are limited to k-1 contrasts, where k is the number of levels of the categorical predictor. The default ("treatment"/"dummy") coding scheme allows us to test a reference level vs. each other level, but other coding schemes allow us to make other comparisons if they make more sense for our purposes. Check out [this page for an overview of contrast coding](https://stats.idre.ucla.edu/r/library/r-library-contrast-coding-systems-for-categorical-variables/) (from the UCLA Institute for Digital Research and Education) to learn how to use the `contrasts()` function to set contrasts for a categorical variable.  
@@ -172,7 +170,7 @@ contrasts(emo_tib$emoreg_cond) = contr.poly(3) #3 corresponds to number of level
 # view the contrast coding scheme
 contrasts(emo_tib$emoreg_cond)
 # re-estimate the model
-card_lm <- emo_tib %>% 
+card_lm <- emo_tib |> 
   lm(formula = card_out_react_prep ~ emoreg_cond)
 # output the model summary
 summary(card_lm)
@@ -216,7 +214,7 @@ Based on the code you wrote in Step 3.1, include `prepIOS_cent` as a predictor i
 ```{r Step4a,fig.show='hold', results='hold'}
 #set an orthogonal coding scheme for emoreg_cond
 contrasts(emo_tib$emoreg_cond) <- contr.helmert(3)
-card_cov_lm <- emo_tib %>% lm(formula = card_out_react_prep ~  emoreg_cond + prepIOS_cent)
+card_cov_lm <- emo_tib |> lm(formula = card_out_react_prep ~  emoreg_cond + prepIOS_cent)
 car::Anova(card_cov_lm, type=3)
 ```
 </div>
@@ -235,20 +233,21 @@ We can hypothesize that there is an interaction of `emoreg_cond` and `direct_con
 #### Step 5.1 - plot the means in a clustered bar chart  
 
 Use ggplot and map `emoreg_cond` to `x`, and `direct_cond` to `fill`. Use `geom_col()` to make bars for the group means, then add error bars (representing 95% CI) with `geom_errorbar()`. We did a similar chart in Step 3.1 of the data visualization activity, but it's been a while, so take a peek at the solution if it helps.  
+**have extra time?** - see if you can improve on this visualization. How can you better visualize the variability of the data?
 
 <button class="btn btn-primary" data-toggle="collapse" data-target="#step5a"> Show/Hide Solution </button>  
 <div id="step5a" class="collapse">  
 ```{r Step5a-barplot-means, fig.show='hold', results='hold', message=FALSE}
-card_out_summary <- emo_tib %>% 
-  group_by(emoreg_cond,direct_cond) %>% 
+card_out_summary <- emo_tib |> 
+  group_by(emoreg_cond,direct_cond) |> 
   dplyr::summarise(
     mean_card_out = mean(card_out_react_prep),
     ci.low = mean_cl_normal(card_out_react_prep)$ymin,
     ci.upp = mean_cl_normal(card_out_react_prep)$ymax,
-  ) %>% ungroup()
+  ) |> ungroup()
 
 # add ymin and ymax to the aesthetics list, which are needed for geom_errorbar
-p5 <- card_out_summary %>% 
+p5 <- card_out_summary |> 
   ggplot(aes(x = emoreg_cond, y = mean_card_out, fill = direct_cond,
              ymin=ci.low, ymax=ci.upp)) + 
     geom_col(position = position_dodge(.9)) + 
