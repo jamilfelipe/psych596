@@ -1,6 +1,9 @@
 # data-day data files
 activities/data-day/data/
 
+# Process (Hayes)
+activities/moderation-mediation/r_docs/process.R
+
 # lecture slides
 lecture-slides/
 
