@@ -79,7 +79,7 @@
 
 ----------------------------------------------------------------
 
-### Activity #8.5 - Take a break!  
+### Take a break!  
 
 > ###### [SPSS Activity](https://phdcomics.com/comics.php?f=1816)  
 > ###### [RStudio Activity](https://xkcd.com/552/)  
@@ -89,7 +89,8 @@
 ### Activity #9 - Data Day 1  
 
 > ###### Files edited in class  
-> - [Notes on Atiyah's ANOVA in SPSS](data-day/spss/2024/dataday1-notes-spss.html)  
+> - [spss syntax (Hiba)](data-day/spss/2025/hiba-syntax.sps)  
+> - [R markdown (Giselle) - coming soon](data-day/r_docs/2025-Giselle-data-analysis.Rmd)
 
 
 
