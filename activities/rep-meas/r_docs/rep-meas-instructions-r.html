@@ -459,13 +459,13 @@ Show/Hide Solution
 <div id="step2" class="collapse">
 <pre class="r"><code>#1. first import the data
 #funny unintended result: &quot;NA == &quot;na&quot; is interpreted by R as FALSE, and the function accepts it as a value for the first option `col_types`
-#incorrect
+#incorrect  
 mrot_tib &lt;- readr::read_csv(&quot;data/mentalrotation_bysub_tidy.csv&quot;, NA == &quot;na&quot;)
-#incorrect (equivalent to above)
+#incorrect (equivalent to above)  
 mrot_tib &lt;- readr::read_csv(&quot;data/mentalrotation_bysub_tidy.csv&quot;, FALSE) 
-#correct
+#correct  
 mrot_tib &lt;- readr::read_csv(&quot;data/mentalrotation_bysub_tidy.csv&quot;, na = &quot;na&quot;)
-#also correct, since there are no missing values
+#also correct, since there are no missing values  
 mrot_tib &lt;- readr::read_csv(&quot;data/mentalrotation_bysub_tidy.csv&quot;)
 
 #2. now make sure the columns we want as factors are treated that way, using forcats::as_factor() set DesiredResponse and Angle as factor variable 

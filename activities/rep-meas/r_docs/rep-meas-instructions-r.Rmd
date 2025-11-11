@@ -68,13 +68,13 @@ Learn how to analyze a repeated measure/longitudinal design:
 ```{r Step-2-import, fig.show='hold', results='hold', message=FALSE}
 #1. first import the data
 #funny unintended result: "NA == "na" is interpreted by R as FALSE, and the function accepts it as a value for the first option `col_types`
-#incorrect
+#incorrect  
 mrot_tib <- readr::read_csv("data/mentalrotation_bysub_tidy.csv", NA == "na")
-#incorrect (equivalent to above)
+#incorrect (equivalent to above)  
 mrot_tib <- readr::read_csv("data/mentalrotation_bysub_tidy.csv", FALSE) 
-#correct
+#correct  
 mrot_tib <- readr::read_csv("data/mentalrotation_bysub_tidy.csv", na = "na")
-#also correct, since there are no missing values
+#also correct, since there are no missing values  
 mrot_tib <- readr::read_csv("data/mentalrotation_bysub_tidy.csv")
 
 #2. now make sure the columns we want as factors are treated that way, using forcats::as_factor() set DesiredResponse and Angle as factor variable 
