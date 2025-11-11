@@ -5,6 +5,7 @@ output:
   html_document: default
 always_allow_html: true
 ---
+*last edited Nov 11, 2025*  
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -36,8 +37,6 @@ Learn how to analyze a repeated measure/longitudinal design:
 - **Download this data file and save it in the "data" folder within the project folder you created for this week:**  
     - ["mentalrotation\_bysub\_tidy.csv"](../data/mentalrotation_bysub\_tidy.csv)   
 - Now open RStudio and start a new project, select "Existing Directory" and select the folder you set up earlier for this activity as the location    
-- Install the package “ggbeeswarm” in the console:
-    - `install.packages("ggbeeswarm")`
 - In RStudio, start a new R markdown and do your work in there, save the file in a subfolder called r_docs  
   - put these lines in your "setup" code chunk:  
   `knitr::opts_chunk$set(echo = TRUE)`   
