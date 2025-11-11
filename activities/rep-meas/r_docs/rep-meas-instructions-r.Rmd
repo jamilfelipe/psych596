@@ -68,9 +68,14 @@ Learn how to analyze a repeated measure/longitudinal design:
 ```{r Step-2-import, fig.show='hold', results='hold', message=FALSE}
 #1. first import the data
 #funny unintended result: "NA == "na" is interpreted by R as FALSE, and the function accepts it as a value for the first option `col_types`
+#incorrect
+mrot_tib <- readr::read_csv("data/mentalrotation_bysub_tidy.csv", NA == "na")
+#incorrect (equivalent to above)
 mrot_tib <- readr::read_csv("data/mentalrotation_bysub_tidy.csv", FALSE) 
 #correct
 mrot_tib <- readr::read_csv("data/mentalrotation_bysub_tidy.csv", na = "na")
+#also correct, since there are no missing values
+mrot_tib <- readr::read_csv("data/mentalrotation_bysub_tidy.csv")
 
 #2. now make sure the columns we want as factors are treated that way, using forcats::as_factor() set DesiredResponse and Angle as factor variable 
 mrot_tib <- mrot_tib  |>  dplyr::mutate(
@@ -91,8 +96,7 @@ mrot_summary_tib <- mrot_tib |>
     RT.ci.upp = mean_cl_normal(RT)$ymax
   ) |> ungroup()
 #now display the tibble as a formatted table
-mrot_summary_tib |> knitr::kable(caption = "Summary of RT", digits = 2) |> 
-  kableExtra::kable_classic(lightable_options = "hover")
+mrot_summary_tib |> knitr::kable(caption = "Summary of RT", digits = 2) 
 
 #4. Plot the means and CI in a line chart
 p1 <- mrot_tib |>
@@ -146,9 +150,7 @@ summary(rt_rm)
 
 #5. output partial eta-squared effect sizes for comparison with SPSS  
 effectsize::eta_squared(rt_rm, ci = .95, partial = TRUE, alternative = "two.sided") |>
-  kableExtra::kbl(caption = "Effect Size: Partial Eta-squared", digits = 4) |>
-  kableExtra::kable_styling(full_width = FALSE)
-
+  knitr::kable(caption = "Effect Size: Partial Eta-squared", digits = 4) 
 
 
 ```
