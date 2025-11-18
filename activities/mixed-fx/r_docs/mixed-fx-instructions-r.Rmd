@@ -91,10 +91,9 @@ rt_data |> dplyr::group_by(modality) |> dplyr::summarise(
   trialwiseRTmedian = median(RT, na.rm = TRUE),
   trialwiseRTsd = sd(RT, na.rm = TRUE)
 ) |> ungroup() |> 
-  kableExtra::kbl(
-    caption = "descriptives by modality condition (trialwise, PID ignored)", 
-    digits = 2) |> 
-  kableExtra::kable_classic(full_width=FALSE)
+  knitr::kable(
+    caption = "descriptives by modality condition (pooled, PID ignored)", 
+    digits = 2) 
 ```
 </div>
 &nbsp;
@@ -124,10 +123,9 @@ rt_bysub |> dplyr::group_by(modality) |> dplyr::summarise(
   bysub_mean_RT = mean(bysub_RT),
   bysub_sd_RT = sd(bysub_RT)
 ) |> ungroup() |> 
-  kableExtra::kbl(
+  knitr::kable(
     caption = "descriptives, first aggregated by participant",
-    digits = 2) |> 
-  kableExtra::kable_classic(full_width=FALSE)
+    digits = 2) 
 
 ```
 </div>
